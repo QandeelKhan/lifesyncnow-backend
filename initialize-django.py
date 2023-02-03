@@ -7,78 +7,70 @@ import requests
 import json
 from pprint import pprint
 from termcolor import colored
+import shutil
+
 print(colored("WARNING: This is a self-destructive script ❌. Proceed with caution!", "red"))
 run_script = input("Are you sure you want to run the script? (Y/N) ")
 if run_script.upper() != "Y":
     print("Script execution cancelled.")
 else:
-
-    # ------DELETING OLD VIRTUAL ENVIRONMENT AND CREATING NEW_ONE START
-
-    # Get the root directory of the current project
-    root_dir = os.getcwd()
-
-    # Prompt the user to confirm if they want to create a new virtual environment
-    create_new_venv = input(
-        "Do you want to create a new virtual environment for this project? (y/n): ")
-    if create_new_venv.lower() not in ["yes", "y"]:
-        print("Skipping the creation of a new virtual environment.")
+    venv_name = input("Do you want to create a virtual environment? (Y/N) ")
+    if venv_name.upper() != "Y":
+        print("No virtual environment created.")
     else:
-        # Prompt the user for the name of the new virtual environment
-        new_venv_name = input(
-            "Enter the name of the new virtual environment (without 'venv-' prefix): ")
-        venv_name = "venv-" + new_venv_name
+        project_name = input("Enter the name of the project: ")
+        venv_dir = "venv-" + project_name
+        current_dir = os.getcwd()
 
-        # Delete the old virtual environment folder
-        venv_path = os.path.join(root_dir, venv_name)
-        if os.path.exists(venv_path):
-            print(f"Deleting the old virtual environment: {venv_path}")
-            subprocess.call(["rm", "-rf", venv_path])
+        # Remove existing virtual environment directories
+        for item in os.listdir(current_dir):
+            if item.startswith("venv-"):
+                item_path = os.path.join(current_dir, item)
+                shutil.rmtree(item_path)
 
-        # Create a new virtual environment
-        print(f"Creating a new virtual environment: {venv_path}")
-        subprocess.call(["python3", "-m", "venv", venv_path])
+        # Create new virtual environment
+        os.system(f"python3 -m venv {venv_dir}")
 
-        # Activate the virtual environment
-        activate_script = os.path.join(venv_path, "bin", "activate")
-        subprocess.call(["source", activate_script])
+        # Print instructions for activating the virtual environment
+        venv_path = os.path.join(current_dir, venv_dir)
+        activate_path = os.path.join(venv_path, "bin/activate")
+        print(colored("To activate the virtual environment, run the following command:", "yellow"))
+        print(f"source {activate_path}")
 
-        # Install the dependencies from the requirements.txt file
-        print(colored("...Installing pip dependencies", "yellow"))
-        time.sleep(2)
-        requirements_file = os.path.join(root_dir, "requirements.txt")
-        subprocess.call(["pip", "install", "-r", requirements_file])
-        print(colored("PIP dependencies installed! ", "Green"))
-        time.sleep(3)
 
-# -------CREATE DATABASE USER/PASSWORD/DATABASE
+# -------CREATE POSTGRESQL DATABASE USER/PASSWORD/DATABASE
+    want_database = input(colored("Do you want to create a database?", "cyan"))
+    if want_database.upper() != "Y":
+        print("No virtual environment created.")
+    else:
+        def create_user_and_database(username, password, dbname):
+            conn = psycopg2.connect(
+                host="localhost",
+                user="postgres",
+                password="com.1995",
+                database="postgres"
+            )
+            conn.autocommit = True
+            cursor = conn.cursor()
 
-    def create_user_and_database(username, password, dbname):
-        conn = psycopg2.connect(
-            host="localhost",
-            user="postgres",
-            password="com.1995",
-            database="postgres"
-        )
-        conn.autocommit = True
-        cursor = conn.cursor()
+            # create the user
+            cursor.execute(f"CREATE USER {username} WITH PASSWORD '{password}'")
 
-        # create the user
-        cursor.execute(f"CREATE USER {username} WITH PASSWORD '{password}'")
+            # create the database and set the owner to the new user
+            cursor.execute(f"CREATE DATABASE {dbname} OWNER {username}")
 
-        # create the database and set the owner to the new user
-        cursor.execute(f"CREATE DATABASE {dbname} OWNER {username}")
+            cursor.close()
+            conn.close()
 
-        cursor.close()
-        conn.close()
-
-    if __name__ == "__main__":
-        username = input("Enter the username: ")
-        password = input("Enter the password: ")
-        dbname = input("Enter the database name: ")
-        create_user_and_database(username, password, dbname)
-        print(colored("User and database created successfully!", "Green"))
-        time.sleep(3)
+        if __name__ == "__main__":
+            print(colored("...Creating PostgreSQL USER/PASS/Database", "yellow"))
+            time.sleep(3)
+            username = input("Enter the username: ")
+            password = input("Enter the password: ")
+            dbname = input("Enter the database name: ")
+            create_user_and_database(username, password, dbname)
+            print(colored("User and database created successfully!", "green"))
+            time.sleep(3)
 
 # -------REPLACING INSTANCES
 
@@ -120,16 +112,41 @@ else:
 
     # Prompt the user for the repository name
     repo_name = input("Enter the name of the repository you want to create: ")
-    repo_description = input(
-        "Please enter the description of the repository you want to create: ")
 
-    # Define the API endpoint
-    # endpoint = f"https://api.github.com/user/{username}/repos"
+    # Define the API endpoint for getting the user's repositories
+    repos_endpoint = f"{api_base_url}/user/repos"
 
     # Set up authentication headers
     headers = {
         "Authorization": f"Bearer {token}"
     }
+
+    # Make the API request to get the user's repositories
+    response = requests.get(repos_endpoint, headers=headers)
+
+    # Check the response status code
+    if response.status_code == 200:
+        # Get the list of repositories
+        repos = response.json()
+
+        # Check if the repository already exists
+        repo_exists = False
+        for repo in repos:
+            if repo["name"] == repo_name:
+                repo_exists = True
+                break
+
+    # If the repository already exists, prompt the user to enter a new name
+    if repo_exists:
+        print(f"Repository with the name '{repo_name}' already exists.")
+        repo_name = input("Please enter a new name for the repository: ")
+
+    # Prompt the user for the repository description
+    repo_description = input(
+        "Please enter the description of the repository you want to create: ")
+
+    # Define the API endpoint for creating the repository
+    create_repo_endpoint = f"{api_base_url}/user/repos"
 
     # Define the request data
     data = {
@@ -138,9 +155,8 @@ else:
         "private": False
     }
 
-    # Make the API request
-    response = requests.post(f"{api_base_url}/user/repos",
-                             headers=headers, json=data)
+    # Make the API request to create the repository
+    response = requests.post(create_repo_endpoint, headers=headers, json=data)
 
     # Check the response status code
     if response.status_code == 201:
@@ -156,6 +172,7 @@ else:
             print(f"Response message: {response_json['message']}")
         except:
             print(f"Response: {response.text}")
+
 # -----------CREATING NEW ORIGIN END
 
 # -----------ADD NEW ORIGIN START
@@ -171,6 +188,7 @@ else:
 # -------ADDING COLLABORATOR
 
     # Prompt the user to confirm if they have collaborators to add
+    collaborator_username = None
     add_collaborators = input(
         "Do you have any collaborators to add? (yes/no): ").lower()
 
@@ -200,9 +218,8 @@ else:
         add_collaborators = input(
             "Do you have another collaborator to add? (yes/no): ").lower()
 
-    if add_collaborators in ["no", "n"]:
-        print(
-            f"No more collaborators added other then {collaborator_username}.")
+    if add_collaborators in ["no", "n"] and collaborator_username is not None:
+        print(f"No more collaborators added other then {collaborator_username}.")
 # -------ADDING COLLABORATOR END
 
 # -------PUSHING CHANGES
