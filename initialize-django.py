@@ -109,6 +109,13 @@ else:
     email = os.environ["GH_EMAIL"]
     api_base_url = "https://api.github.com"
 # -----------CREATING NEW ORIGIN
+    # Remove the current origin
+    print(colored("...removing the current origin", "red"))
+    time.sleep(2)
+    subprocess.run(["git", "remote", "remove", "origin"])
+    # subprocess.run(["git", "config", "--global", "user.name", "$GH_USERNAME"])
+    # subprocess.run(["git", "config", "--global", "user.email", "$GH_USERNAME@users.noreply.github.com"])
+    # subprocess.run(["git", "config", "--global", "user.name", "$GH_USERNAME"])
 
     # Prompt the user for the repository name
     repo_name = input("Enter the name of the repository you want to create: ")
@@ -237,8 +244,6 @@ else:
 
 
 # --------NEW BACKUP BRANCH
-    username = os.environ["GH_USERNAME"]
-    token = os.environ["GH_TOKEN"]
     
     # Replace <OWNER> and <REPO> with your GitHub repository information
     # The API endpoint to get the latest commit sha for an existing branch
