@@ -1,0 +1,39 @@
+celery -A StorefrontBackend2 beat
+celery -A StorefrontBackend2 flower
+pwd or py.test
+
+locust -f locustfiles/browse_products.py
+docker run -d -p 6379:6379 redis 
+
+silk use localhost:8000/silk/ of our project
+
+add /media/ and /static/ to gitignore
+
+install whitenoise: dajngo does't support serving static files in production even though we collect them using cmd  
+collectstatic but to add this feature in production we have to install library whitenoise,using
+whitenoise we can serve our collected statics in production as well.
+
+se logging.so later when app is deployed we can see the log file and troubleshoot issue.
+add logfile in .gitignore i.e general.log
+
+install gunicorm(fast server then testing dev server):
+then to run our app on gunicorm server use 'gunicorm StorefrontBackend2.wsgi'
+
+we can make our app pwa(for mobile non native app of same web)
+
+
+# ---- #
+Procfile(only for heroku) and write initial cmds every time our server start in procfile.
+configure heroku ad-on for our app and choose the db service (i.e CLEARBD on) for provisioning 
+mysql on our heroku cloud.
+'heroku config' -> to see the our env vars on heroku cloud server, copy CLEARBD url before '?'
+and create an env var 'heroku config:set DATABASE_URL(anything)="value of clear db env"'
+
+do the same in other vps but without procfiles
+
+5(only for heroku):
+provision a redis instance (ad-on heroku redis):
+provision our smtp server (ad-on Mailgun):
+
+# -----to install all the dependencies from requirements.txt
+# pip install -r requirements.txt
