@@ -237,6 +237,8 @@ else:
 
 
 # --------NEW BACKUP BRANCH
+    username = os.environ["GH_USERNAME"]
+    token = os.environ["GH_TOKEN"]
     # Replace <OWNER> and <REPO> with your GitHub repository information
     # The API endpoint to get the latest commit sha for an existing branch
     url = f"https://api.github.com/repos/{username}/{repo_name}/git/refs/heads/main"
@@ -250,7 +252,7 @@ else:
     else:
         print(
             f"Failed to retrieve latest commit sha: {response.json()['message']}")
-        exit()
+        # exit()
 
     # The API endpoint to create a new branch
     url = f"https://api.github.com/repos/{username}/{repo_name}/git/refs"
