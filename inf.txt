@@ -37,3 +37,15 @@ provision our smtp server (ad-on Mailgun):
 
 # -----to install all the dependencies from requirements.txt
 # pip install -r requirements.txt
+# -----git global
+# echo "https://${GH_USERNAME}:${GH_TOKEN}@github.com" > ~/.git-credentials
+
+# This will create the ~/.git-credentials file and write the contents of your environment variables to it. The ${GH_USERNAME} and ${GH_TOKEN} syntax is used to reference the values of the environment variables.
+
+# To configure Git to use the credentials stored in the ~/.git-credentials file, you can run the following command:
+
+# lua
+
+# git config --global credential.helper store
+
+# This will set the Git global configuration setting credential.helper to store, which tells Git to use the contents of the ~/.git-credentials file for authentication.
