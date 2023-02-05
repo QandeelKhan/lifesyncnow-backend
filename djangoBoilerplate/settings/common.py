@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'playground',
     'store',
     'core',
+    'UserManagement',
     'tags',
     'likes',
 ]
@@ -129,12 +130,12 @@ REST_FRAMEWORK = {
     ),
 }
 
-AUTH_USER_MODEL = 'core.User'
+AUTH_USER_MODEL = 'UserManagement.User'
 
 DJOSER = {
     'SERIALIZERS': {
-        'user_create': 'core.serializers.UserCreateSerializer',
-        'current_user': 'core.serializers.UserSerializer',
+        'user_create': 'UserManagement.serializers.UserCreateSerializer',
+        'current_user': 'UserManagement.serializers.UserSerializer',
     }
 }
 
