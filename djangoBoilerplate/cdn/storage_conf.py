@@ -28,9 +28,9 @@ else:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'space-django-boilerplate/media'
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'space-django-boilerplate/static'),
-)
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, 'space-django-boilerplate/static'),
+# )
 # helping material
 # https://testdriven.io/blog/django-digitalocean-spaces/
 # https://shopingly-space.fra1.digitaloceanspaces.com/media/productimg/0_98drx4MegZUq4iTd.jpeg

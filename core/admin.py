@@ -6,6 +6,7 @@ from store.admin import ProductAdmin, ProductImageInline
 from tags.models import TaggedItem
 from .models import User
 
+
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
@@ -15,14 +16,14 @@ class UserAdmin(BaseUserAdmin):
         }),
     )
 
-class TagInline(GenericTabularInline):
-    autocomplete_fields = ['tag']
-    model = TaggedItem
+# class TagInline(GenericTabularInline):
+#     autocomplete_fields = ['tag']
+#     model = TaggedItem
 
 
-class CustomProductAdmin(ProductAdmin):
-    inlines = [TagInline, ProductImageInline]
+# class CustomProductAdmin(ProductAdmin):
+#     inlines = [TagInline, ProductImageInline]
 
 
-admin.site.unregister(Product)
-admin.site.register(Product, CustomProductAdmin)
+# admin.site.unregister(Product)
+# admin.site.register(Product, CustomProductAdmin)

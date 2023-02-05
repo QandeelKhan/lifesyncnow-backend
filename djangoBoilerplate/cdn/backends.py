@@ -1,5 +1,6 @@
 from django.conf import settings
 from storages.backends.s3boto3 import S3Boto3Storage
+
 # making settings for our static assets to after that set in conf.py
 # this will make upload our static folder into digitalocean,
 
