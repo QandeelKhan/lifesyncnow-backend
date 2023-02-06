@@ -24,11 +24,11 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'rest_framework_swagger',
     'playground',
-    'store',
-    'core',
+    # 'store',
+    # 'core',
+    # 'tags',
+    # 'likes',
     'UserManagement',
-    'tags',
-    'likes',
 ]
 
 MIDDLEWARE = [
