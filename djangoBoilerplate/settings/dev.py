@@ -53,6 +53,14 @@ ALLOWED_HOSTS = ["*"]
 #     }
 # }
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+
 CELERY_BROKER_URL = 'redis://redis:6379/1'
 
 CACHES = {
