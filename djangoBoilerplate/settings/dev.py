@@ -1,13 +1,11 @@
+from .common import *
 import os
 # import dj_database_url
 # from decouple import config
 from dotenv import load_dotenv
-from .common import *
 load_dotenv()
 
 DEBUG = os.getenv("DEBUG")
-
-SECRET_KEY = os.getenv('SECRET_KEY')
 
 # ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", default=['*']).split()
 ALLOWED_HOSTS = ["*"]

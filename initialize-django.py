@@ -34,7 +34,8 @@ else:
         # Print instructions for activating the virtual environment
         venv_path = os.path.join(current_dir, venv_dir)
         activate_path = os.path.join(venv_path, "bin/activate")
-        print(colored("To activate the virtual environment, run the following command:", "yellow"))
+        print(colored(
+            "To activate the virtual environment, run the following command:", "yellow"))
         print(f"source {activate_path}")
 
 
@@ -54,7 +55,8 @@ else:
             cursor = conn.cursor()
 
             # create the user
-            cursor.execute(f"CREATE USER {username} WITH PASSWORD '{password}'")
+            cursor.execute(
+                f"CREATE USER {username} WITH PASSWORD '{password}'")
 
             # create the database and set the owner to the new user
             cursor.execute(f"CREATE DATABASE {dbname} OWNER {username}")
@@ -102,6 +104,7 @@ else:
         time.sleep(3)
 
 # -------VERSION CONTROL
+
     print(colored("...Setting up GIT version control", "yellow"))
     time.sleep(3)
     username = os.environ["GH_USERNAME"]
@@ -226,7 +229,8 @@ else:
             "Do you have another collaborator to add? (yes/no): ").lower()
 
     if add_collaborators in ["no", "n"] and collaborator_username is not None:
-        print(f"No more collaborators added other then {collaborator_username}.")
+        print(
+            f"No more collaborators added other then {collaborator_username}.")
 # -------ADDING COLLABORATOR END
 
 # -------PUSHING CHANGES
@@ -244,7 +248,7 @@ else:
 
 
 # --------NEW BACKUP BRANCH
-    
+
     # Replace <OWNER> and <REPO> with your GitHub repository information
     # The API endpoint to get the latest commit sha for an existing branch
     url = f"https://api.github.com/repos/{username}/{repo_name}/git/refs/heads/main"
