@@ -1,14 +1,3 @@
-# from django.urls import path
-# from .views import LoginView, SignupView, UserViewSet
-
-# urlpatterns = [
-#     path('user/<int:user_id>/', UserViewSet.as_view({'get': 'retrieve'}), name='get_user_details'),
-#     path('user/login/', LoginView.as_view(), name='login'),
-#     path('user/signup/', SignupView.as_view(), name='signup'),
-#     path('user/logout/', UserViewSet.as_view({'post': 'logout'}), name='logout'),
-# ]
-
-
 from django.urls import path
 from . import views
 
