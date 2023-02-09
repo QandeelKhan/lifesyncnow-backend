@@ -33,47 +33,33 @@ class UserRegistrationView(generics.CreateAPIView):
         self.headers.update({'Authorization': f"Bearer {token['access']}"})
 
 
-# class UserLoginView(generics.CreateAPIView):
-#     serializer_class = UserLoginSerializer
-
-#     def post(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         email = serializer.data.get('email')
-#         password = serializer.data.get('password')
-#         user = authenticate(email=email, password=password)
-#         if user is not None:
-#             token = get_token_for_user(user)
-#             self.headers.update({'Authorization': f"Bearer {token['access']}"})
-#             return Response(status=status.HTTP_200_OK)
-#         else:
-#             return Response({'errors': {"non_field_errors": ['Email or Password is not valid']}}, status=status.HTTP_404_NOT_FOUND)
-
-class UserLoginView(APIView):
+class UserLoginView(generics.CreateAPIView):
+    serializer_class = UserLoginSerializer
     renderer_classes = [UserRenderer]
 
-    def post(self, request):
-        serializer = UserLoginSerializer(data=request.data)
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         email = serializer.data.get('email')
         password = serializer.data.get('password')
         user = authenticate(email=email, password=password)
         if user is not None:
             token = get_token_for_user(user)
+            self.headers.update({'Authorization': f"Bearer {token['access']}"})
             return Response({'token': token, 'msg': 'Login Successful'}, status=status.HTTP_200_OK)
         else:
             return Response({'errors': {"non_field_errors": ['Email or Password is not valid']}}, status=status.HTTP_404_NOT_FOUND)
 
 
-class GoogleLoginAPIView(APIView):
-    permission_classes = []
+# class GoogleLoginAPIView(APIView):
+#     permission_classes = []
 
-    def post(self, request):
-        serializer = GoogleLoginSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            user = serializer.validated_data
-            return Response({"token": user.auth_token.key})
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def post(self, request):
+#         serializer = GoogleLoginSerializer(data=request.data)
+#         if serializer.is_valid(raise_exception=True):
+#             user = serializer.validated_data
+#             return Response({"token": user.auth_token.key})
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserProfileView(generics.RetrieveAPIView):
