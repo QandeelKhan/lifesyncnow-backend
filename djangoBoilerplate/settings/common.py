@@ -10,6 +10,7 @@ load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+ALLOWED_HOSTS = ["*"]
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
@@ -27,29 +28,59 @@ INSTALLED_APPS = [
     'silk',
     'debug_toolbar',
     'rest_framework_swagger',
-    'playground',
+    # 'playground',
     # 'store',
     # 'core',
     # 'tags',
     # 'likes',
     # --USER MANAGEMENT,
-    'UserManagement',
-    'allauth',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.twitter',
     'rest_framework_simplejwt',
+    'UserManagement',
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.google',
+    # 'allauth.socialaccount.providers.twitter',
+    #
+    # 'rest_auth',
+    # 'rest_auth.registration',
+    # 'rest_framework.authtoken',
 ]
 
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': ['profile', 'email'],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        }
-    },
-    'twitter': {}
-}
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_UNIQUE_EMAIL = True
+
+# LOGIN_REDIRECT_URL = '/UserManagement(app name)/profile(url name)/'
+
+# GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+# GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+# TWITTER_CONSUMER_KEY = os.getenv("TWITTER_CONSUMER_KEY")
+# TWITTER_CONSUMER_SECRET = os.getenv("TWITTER_CONSUMER_SECRET")
+
+# SOCIALACCOUNT_PROVIDERS = {
+#     'google': {
+#         'APP_ID': GOOGLE_CLIENT_ID,
+#         'APP_SECRET': GOOGLE_CLIENT_SECRET,
+#         'SCOPE': ['profile', 'email'],
+#         'AUTH_PARAMS': {
+#             'access_type': 'online',
+#         }
+#     },
+#     'twitter': {
+#         'KEY': TWITTER_CONSUMER_KEY,
+#         'SECRET': TWITTER_CONSUMER_SECRET,
+#     },
+# }
+
+# from ..google.settings_secret import *  # noqa
+
+AUTHENTICATION_BACKENDS = [
+    # ...
+    'django.contrib.auth.backends.ModelBackend',
+    # 'allauth.account.auth_backends.AuthenticationBackend',
+]
+
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -87,6 +118,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # for allauth
+                # 'allauth.account.context_processors.account',
+                # 'allauth.socialaccount.context_processors.socialaccount',
             ],
         },
     },

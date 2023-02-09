@@ -11,7 +11,8 @@ from UserManagement.serializers import (
     UserLoginSerializer,
     UserPasswordResetSerializer,
     UserProfileSerializer,
-    UserRegistrationSerializer
+    UserRegistrationSerializer,
+    GoogleLoginSerializer
 )
 
 
@@ -47,6 +48,17 @@ class UserLoginView(generics.CreateAPIView):
             return Response(status=status.HTTP_200_OK)
         else:
             return Response({'errors': {"non_field_errors": ['Email or Password is not valid']}}, status=status.HTTP_404_NOT_FOUND)
+
+
+class GoogleLoginAPIView(APIView):
+    permission_classes = []
+
+    def post(self, request):
+        serializer = GoogleLoginSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            user = serializer.validated_data
+            return Response({"token": user.auth_token.key})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserProfileView(generics.RetrieveAPIView):

@@ -154,3 +154,16 @@ class UserPasswordResetSerializer(serializers.Serializer):
         except DjangoUnicodeDecodeError as identifire:
             PasswordResetTokenGenerator().check_token(user, token)
             raise ValidationError("Token is not Valid or Expired")
+
+
+# from django.contrib.auth.models import User
+
+class GoogleLoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, data):
+        user = authenticate(**data)
+        if user and user.is_active:
+            return user
+        raise serializers.ValidationError("Incorrect Credentials")

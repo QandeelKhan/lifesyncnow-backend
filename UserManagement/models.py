@@ -43,6 +43,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
+    username = None
     email = models.EmailField(
         verbose_name='Email',
         max_length=255,

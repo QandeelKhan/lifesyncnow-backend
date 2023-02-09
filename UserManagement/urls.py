@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
@@ -11,4 +11,9 @@ urlpatterns = [
          name='send-reset-password-email'),
     path('reset-password/<uid>/<token>/', views.UserPasswordResetView.as_view(),
          name='reset-password'),
+    #
+    #     path('accounts/', include('allauth.urls')),
+    #     path('accounts-google/', include('allauth.socialaccount.urls')),
+    #     path('google-login/', views.GoogleLogin.as_view(), name='google-login'),
+
 ]
