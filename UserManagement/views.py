@@ -33,19 +33,34 @@ class UserRegistrationView(generics.CreateAPIView):
         self.headers.update({'Authorization': f"Bearer {token['access']}"})
 
 
-class UserLoginView(generics.CreateAPIView):
-    serializer_class = UserLoginSerializer
+# class UserLoginView(generics.CreateAPIView):
+#     serializer_class = UserLoginSerializer
 
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+#     def post(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         email = serializer.data.get('email')
+#         password = serializer.data.get('password')
+#         user = authenticate(email=email, password=password)
+#         if user is not None:
+#             token = get_token_for_user(user)
+#             self.headers.update({'Authorization': f"Bearer {token['access']}"})
+#             return Response(status=status.HTTP_200_OK)
+#         else:
+#             return Response({'errors': {"non_field_errors": ['Email or Password is not valid']}}, status=status.HTTP_404_NOT_FOUND)
+
+class UserLoginView(APIView):
+    renderer_classes = [UserRenderer]
+
+    def post(self, request):
+        serializer = UserLoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         email = serializer.data.get('email')
         password = serializer.data.get('password')
         user = authenticate(email=email, password=password)
         if user is not None:
             token = get_token_for_user(user)
-            self.headers.update({'Authorization': f"Bearer {token['access']}"})
-            return Response(status=status.HTTP_200_OK)
+            return Response({'token': token, 'msg': 'Login Successful'}, status=status.HTTP_200_OK)
         else:
             return Response({'errors': {"non_field_errors": ['Email or Password is not valid']}}, status=status.HTTP_404_NOT_FOUND)
 
