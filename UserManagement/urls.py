@@ -1,4 +1,8 @@
 from django.urls import path, include
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 from . import views
 
 urlpatterns = [
@@ -11,9 +15,8 @@ urlpatterns = [
          name='send-reset-password-email'),
     path('reset-password/<uid>/<token>/', views.UserPasswordResetView.as_view(),
          name='reset-password'),
-    #
-    #     path('accounts/', include('allauth.urls')),
-    #     path('accounts-google/', include('allauth.socialaccount.urls')),
-    #     path('google-login/', views.GoogleLogin.as_view(), name='google-login'),
-
+    path('user/token/', TokenObtainPairView.as_view(),
+         name='token_obtain_pair'),
+    path('user/token/refresh/',
+         TokenRefreshView.as_view(), name='token_refresh'),
 ]
