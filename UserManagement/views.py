@@ -1,6 +1,7 @@
+from django.contrib.auth import authenticate, logout
+from django.shortcuts import redirect
 from rest_framework import generics
 from rest_framework.response import Response
-from django.contrib.auth import authenticate
 from rest_framework.views import APIView, status, View
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -108,3 +109,11 @@ class UserPasswordResetView(APIView):
             data=request.data, context={'uid': uid, 'token': token})
         serializer.is_valid(raise_exception=True)
         return Response({'msg': 'Password Reset Successfully.'}, status=status.HTTP_200_OK)
+
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        logout(request)
+        return Response({"message": "Successfully logged out."}, status=status.HTTP_200_OK)
