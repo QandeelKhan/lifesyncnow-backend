@@ -49,3 +49,8 @@ provision our smtp server (ad-on Mailgun):
 # git config --global credential.helper store
 
 # This will set the Git global configuration setting credential.helper to store, which tells Git to use the contents of the ~/.git-credentials file for authentication.
+
+# DB CREDENTIALS
+Enter the username: OurBlogUser  
+Enter the password: OurBlogPassword
+Enter the database name: OurBlogDB
