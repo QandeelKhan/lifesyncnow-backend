@@ -46,7 +46,7 @@ class BlogPostImage(models.Model):
 class BlogPost(models.Model):
     title = models.CharField(max_length=100)
     cover_image = models.ImageField(upload_to='blog-images/',
-                                    storage=fs, validators=[validate_image])
+                                    storage=fs, validators=[validate_image], null=True, blank=True)
     initial_paragraph = models.TextField()
     paragraph_heading = models.CharField(max_length=255)
     quote = models.CharField(max_length=255, null=True, blank=True)
