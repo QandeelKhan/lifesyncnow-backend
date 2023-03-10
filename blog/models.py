@@ -49,8 +49,8 @@ class BlogPost(models.Model):
                                     storage=fs, validators=[validate_image])
     initial_paragraph = models.TextField()
     paragraph_heading = models.CharField(max_length=255)
-    quote = models.CharField(max_length=255)
-    quote_writer = models.CharField(max_length=255)
+    quote = models.CharField(max_length=255, null=True, blank=True)
+    quote_writer = models.CharField(max_length=255, null=True, blank=True)
     second_paragraph = models.TextField()
     post_images = models.ManyToManyField(
         BlogPostImage, related_name='post_images', null=True, blank=True)

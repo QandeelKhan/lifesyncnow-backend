@@ -50,13 +50,22 @@ ALLOWED_HOSTS = ["*"]
 #         'PORT': "25060"
 #     }
 # }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'OurBlogDB',
+        'HOST': 'localhost',
+        'USER': 'postgres',
+        'PASSWORD': 'com.1995'
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 CELERY_BROKER_URL = 'redis://redis:6379/1'
