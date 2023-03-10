@@ -8,7 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.core.files.storage import default_storage
 from decouple import config
-
+from django.utils import timezone
 
 # make custom storage backend for image
 USE_SPACES = config('USE_SPACES', cast=bool, default=True)
@@ -53,17 +53,50 @@ class BlogPost(models.Model):
     quote_writer = models.CharField(max_length=255)
     second_paragraph = models.TextField()
     post_images = models.ManyToManyField(
-        BlogPostImage, related_name='post_images')
-    paragraph_after_image = models.TextField()
+        BlogPostImage, related_name='post_images', null=True, blank=True)
+    paragraph_after_image = models.TextField(null=True, blank=True)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_posts')
-    created_at = models.DateTimeField(auto_now_add=True)
+    # created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now())
     updated_at = models.DateTimeField(auto_now=True)
+    most_recent_posts = models.BooleanField(
+        default=False, null=True, blank=True)
+    featured_posts = models.BooleanField(default=False, null=True, blank=True)
+    older_posts = models.BooleanField(default=False, null=True, blank=True)
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, related_name="post_category")
 
     def __str__(self):
         return self.title
+
+    def is_recent(self):
+        """
+        Returns True if the blog post was created within the last 30 days.
+        """
+        delta = timezone.now() - self.created_at
+        return delta.days <= 30
+
+    def save(self, *args, **kwargs):
+        """
+        Override the save method to set the `most_recent` field based on `is_recent`.
+        """
+        self.most_recent_posts = self.is_recent()
+        super().save(*args, **kwargs)
+
+    def is_older(self):
+        """
+        Returns True if the blog post was created within the last 30 days.
+        """
+        delta = timezone.now() - self.created_at
+        return delta.days >= 30
+
+    def save(self, *args, **kwargs):
+        """
+        Override the save method to set the `most_recent` field based on `is_recent`.
+        """
+        self.older_posts = self.is_older()
+        super().save(*args, **kwargs)
 
 
 class Comment(models.Model):

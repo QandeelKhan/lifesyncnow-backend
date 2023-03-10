@@ -89,9 +89,9 @@ class BlogPostSerializer(serializers.ModelSerializer):
             'cover_image',
             'initial_paragraph',
             'paragraph_heading',
+            'second_paragraph',
             'quote',
             'quote_writer',
-            'second_paragraph',
             'paragraph_after_image',
             'author',
             'author_first_name',
@@ -99,6 +99,9 @@ class BlogPostSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
             'category',
+            'most_recent_posts',
+            'older_posts',
+            'featured_posts',
             'full_name'
         ]
         depth = 1
