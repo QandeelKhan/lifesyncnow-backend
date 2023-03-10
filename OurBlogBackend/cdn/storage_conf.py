@@ -25,12 +25,12 @@ if USE_SPACES:
     DEFAULT_FILE_STORAGE = '<space-name>.cdn.backends.MediaRootS3Boto3Storage'
 else:
     STATIC_URL = '/static/'
-    STATIC_ROOT = BASE_DIR / "space-django-boilerplate/static"
+    STATIC_ROOT = BASE_DIR / "space-our-blog-backend/static"
     MEDIA_URL = '/media/'
-    MEDIA_ROOT = BASE_DIR / 'space-django-boilerplate/media'
+    MEDIA_ROOT = BASE_DIR / 'space-our-blog-backend/media'
 
 # STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'space-django-boilerplate/static'),
+#     os.path.join(BASE_DIR, 'space-our-blog-backend/static'),
 # )
 # helping material
 # https://testdriven.io/blog/django-digitalocean-spaces/
