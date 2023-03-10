@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     # 'core',
     # 'tags',
     # 'likes',
+    'blog',
     # --USER MANAGEMENT,
     'rest_framework_simplejwt',
     'UserManagement',
@@ -105,7 +106,7 @@ INTERNAL_IPS = [
     # ...
 ]
 
-ROOT_URLCONF = 'djangoBoilerplate.urls'
+ROOT_URLCONF = 'OurBlogBackend.urls'
 
 TEMPLATES = [
     {
@@ -123,7 +124,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'djangoBoilerplate.wsgi.application'
+WSGI_APPLICATION = 'OurBlogBackend.wsgi.application'
 
 # Password validation
 
