@@ -72,7 +72,7 @@ class BlogPost(models.Model):
 
     def is_recent(self):
         """
-        Returns True if the blog post was created within the last 30 dayss.
+        Returns True if the blog post was created within the last 30 days.
         """
         delta = timezone.now() - self.created_at
         return delta.days <= 30
