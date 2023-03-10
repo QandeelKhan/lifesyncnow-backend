@@ -1,4 +1,6 @@
-#!/media/qandeel/Drive0/programs/full-stack/our-blog/our-blog-backend/venv-our-blog-backend/bin/python3
+#!/bin/sh
+'''exec' /mnt/usama/4d309eff-3685-47b7-8b80-80ed18a653d3/prgrams/fullstack/our-blog/our-blog-backend/venv-our-blog-backend/bin/python3 "$0" "$@"
+' '''
 # -*- coding: utf-8 -*-
 import re
 import sys
