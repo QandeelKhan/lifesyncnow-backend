@@ -54,3 +54,4 @@ provision our smtp server (ad-on Mailgun):
 Enter the username: OurBlogUser  
 Enter the password: OurBlogPassword
 Enter the database name: OurBlogDB
+a
