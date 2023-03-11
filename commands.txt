@@ -1,3 +1,8 @@
+#1: activate virtual environment
+source venv-our-blog-backend/bin/activate
+#2: run django server
 python3 manage.py runserver
-# this pull required
-# TODO: 
+
+
+# Last pull required commands:
+
