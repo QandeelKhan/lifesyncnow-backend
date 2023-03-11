@@ -120,7 +120,8 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-# .env/
+# TODO: be aware you are insecure as .env file is opened to all
+.env/
 # env/
 # env.bak/
 # ENV/
