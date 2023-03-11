@@ -43,6 +43,13 @@ class BlogPostImage(models.Model):
         return str(self.images)
 
 
+class BlogParagraph(models.Model):
+    blog_post = models.ForeignKey(
+        'BlogPost', on_delete=models.CASCADE, related_name='paragraphs_list')
+    heading = models.CharField(max_length=255, null=True, blank=True)
+    content = models.TextField(null=True, blank=True)
+
+
 class BlogPost(models.Model):
     title = models.CharField(max_length=100)
     cover_image = models.ImageField(upload_to='blog-images/',
@@ -53,7 +60,7 @@ class BlogPost(models.Model):
     quote_writer = models.CharField(max_length=255, null=True, blank=True)
     second_paragraph = models.TextField()
     post_images = models.ManyToManyField(
-        BlogPostImage, related_name='post_images', null=True, blank=True)
+        BlogPostImage, related_name='post_images')
     paragraph_after_image = models.TextField(null=True, blank=True)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_posts')
@@ -66,6 +73,8 @@ class BlogPost(models.Model):
     older_posts = models.BooleanField(default=False, null=True, blank=True)
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, related_name="post_category")
+    paragraphs = models.ManyToManyField(
+        'BlogParagraph', related_name='blog_posts')
 
     def __str__(self):
         return self.title

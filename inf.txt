@@ -57,3 +57,5 @@ Enter the database name: OurBlogDB
 
 python3 manage.py dumpdata --exclude auth.permission --exclude contenttypes > data.json
 python3 manage.py loaddata data.json
+
+sudo fuser -k 8000/tcp
