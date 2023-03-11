@@ -72,29 +72,24 @@ class BlogPost(models.Model):
 
     def is_recent(self):
         """
-        Returns True if the blog post was created within the last 30 dayss.
+        Returns True if the blog post was created within the last 30 days.
         """
         delta = timezone.now() - self.created_at
         return delta.days <= 30
 
-    def save(self, *args, **kwargs):
-        """
-        Override the save method to set the `most_recent` field based on `is_recent`.
-        """
-        self.most_recent_posts = self.is_recent()
-        super().save(*args, **kwargs)
-
     def is_older(self):
         """
-        Returns True if the blog post was created within the last 30 days.
+        Returns True if the blog post was created more than 30 days ago.
         """
         delta = timezone.now() - self.created_at
-        return delta.days >= 30
+        return delta.days > 30
 
     def save(self, *args, **kwargs):
         """
-        Override the save method to set the `most_recent` field based on `is_recent`.
+        Override the save method to set the `most_recent_posts` and `older_posts`
+        fields based on `is_recent` and `is_older` methods respectively.
         """
+        self.most_recent_posts = self.is_recent()
         self.older_posts = self.is_older()
         super().save(*args, **kwargs)
 
