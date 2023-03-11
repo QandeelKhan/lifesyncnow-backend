@@ -77,6 +77,7 @@ class BlogPostSerializer(serializers.ModelSerializer):
     author_first_name = serializers.SerializerMethodField()
     author_last_name = serializers.SerializerMethodField()
     full_name = serializers.SerializerMethodField()
+    category_name = serializers.ReadOnlyField(source='category.category_name')
 
     class Meta:
         model = BlogPost
@@ -99,10 +100,12 @@ class BlogPostSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
             'category',
+            'category_name',
             'most_recent_posts',
             'older_posts',
             'featured_posts',
-            'full_name'
+            'full_name',
+
         ]
         depth = 1
 
