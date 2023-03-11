@@ -54,3 +54,6 @@ provision our smtp server (ad-on Mailgun):
 Enter the username: OurBlogUser  
 Enter the password: OurBlogPassword
 Enter the database name: OurBlogDB
+
+python3 manage.py dumpdata --exclude auth.permission --exclude contenttypes > data.json
+python3 manage.py loaddata data.json
