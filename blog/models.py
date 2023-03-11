@@ -93,6 +93,19 @@ class BlogPost(models.Model):
         self.older_posts = self.is_older()
         super().save(*args, **kwargs)
 
+    # def save(self, *args, **kwargs):
+    # # check if the post is being marked as a featured post
+    #     if self.featured_posts:
+    #         # count how many featured posts already exist for this category
+    #         num_featured_posts = BlogPost.objects.filter(
+    #         category=self.category, featured_posts=True).count()
+
+    #     # if there are already three featured posts for this category, raise an exception
+    #     if num_featured_posts >= 3:
+    #         raise ValueError("A maximum of three posts can be marked as featured posts for each category.")
+
+    #     super().save(*args, **kwargs)
+
 
 class Comment(models.Model):
     post = models.ForeignKey(
