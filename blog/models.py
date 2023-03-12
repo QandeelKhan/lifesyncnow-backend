@@ -43,14 +43,14 @@ class BlogPostImage(models.Model):
         return str(self.images)
 
 
-class BlogPostSBSGuideSubSection(models.Model):
+class SBSGuideSubSection(models.Model):
     """
         A model representing a multiple subheadings and sub contents within a step-by-step guide.
     """
     # Fields
     # New fields for subheadings and subcontent
     sub_heading_number = models.IntegerField(null=True, blank=True,
-                                             help_text='The subheadings number for the step-by-step guide.'
+                                             help_text='The number the sub sections in each sbs guide within a post.used for multiple purposes'
                                              )
     sub_heading = models.ManyToManyField(
         'SubHeading',
@@ -122,6 +122,10 @@ class BlogStepByStepGuide(models.Model):
         A model representing a step-by-step guide within a blog post.
     """
     # Fields
+    sbs_guide_number = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        help_text='Number of the sps guides on a post. can be used for multiple purposes')
     blog_post = models.ForeignKey(
         'BlogPost',
         on_delete=models.CASCADE,
@@ -140,7 +144,7 @@ class BlogStepByStepGuide(models.Model):
         help_text='The main content of the step-by-step guide.'
     )
     sbs_guide_sub_fields = models.ManyToManyField(
-        'BlogPostSBSGuideSubSection', related_name='sbs_guide_sub_fields_section')
+        'SBSGuideSubSection', related_name='sbs_guide_sub_fields_section')
 
 
 class BlogPost(models.Model):

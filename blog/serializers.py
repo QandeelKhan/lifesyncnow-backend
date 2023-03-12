@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from .models import BlogPost, BlogPostImage, Comment, Reply, BlogStepByStepGuide, SubHeading, SubContent, BlogPostSBSGuideSubSection
+from .models import BlogPost, BlogPostImage, Comment, Reply, BlogStepByStepGuide, SubHeading, SubContent, SBSGuideSubSection
 
 
 class SubHeadingSerializer(serializers.ModelSerializer):
@@ -20,7 +20,7 @@ class SBSGuideSubSectionSerializer(serializers.ModelSerializer):
     sub_content = SubContentSerializer(many=True)
 
     class Meta:
-        model = BlogPostSBSGuideSubSection
+        model = SBSGuideSubSection
         fields = '__all__'
 
 
