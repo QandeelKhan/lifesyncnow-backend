@@ -1,6 +1,35 @@
 
 from rest_framework import serializers
-from .models import BlogPost, BlogPostImage, Comment, Reply
+from .models import BlogPost, BlogPostImage, Comment, Reply, BlogStepByStepGuide, SubHeading, SubContent, BlogPostSBSGuideSubSection
+
+
+class SubHeadingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubHeading
+        fields = '__all__'
+
+
+class SubContentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubContent
+        fields = '__all__'
+
+
+class SBSGuideSubSectionSerializer(serializers.ModelSerializer):
+    sub_heading = SubHeadingSerializer(many=True)
+    sub_content = SubContentSerializer(many=True)
+
+    class Meta:
+        model = BlogPostSBSGuideSubSection
+        fields = '__all__'
+
+
+class SBSGuideSerializer(serializers.ModelSerializer):
+    sbs_guide_sub_fields = SBSGuideSubSectionSerializer(many=True)
+
+    class Meta:
+        model = BlogStepByStepGuide
+        fields = '__all__'
 
 
 class BlogPostImageSerializer(serializers.ModelSerializer):
@@ -72,6 +101,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class BlogPostSerializer(serializers.ModelSerializer):
     post_images = BlogPostImageSerializer(many=True)
+    step_by_step_guide = SBSGuideSerializer(many=True)
     comments = CommentSerializer(many=True, read_only=True)
     comment_count = serializers.SerializerMethodField()
     author_first_name = serializers.SerializerMethodField()
@@ -104,7 +134,8 @@ class BlogPostSerializer(serializers.ModelSerializer):
             'most_recent_posts',
             'older_posts',
             'featured_posts',
-            'paragraphs',
+            'step_by_step_guide',
+            # 'sps_guide',
             'full_name',
 
         ]

@@ -91,12 +91,15 @@
 # admin.site.register(Comment, CommentAdmin)
 # admin.site.register(Reply, ReplyAdmin)
 from django.contrib import admin
-from .models import Category, BlogPost, BlogPostImage, Comment, Reply, BlogStepByStepGuide
+from .models import Category, BlogPost, BlogPostImage, Comment, Reply, BlogStepByStepGuide, BlogPostSBSGuideSubSection, SubHeading, SubContent
 
 # Register your models here.
 admin.site.register(Category)
 admin.site.register(BlogPost)
 admin.site.register(BlogPostImage)
 admin.site.register(BlogStepByStepGuide)
+admin.site.register(BlogPostSBSGuideSubSection)
+admin.site.register(SubHeading)
+admin.site.register(SubContent)
 admin.site.register(Comment)
 admin.site.register(Reply)

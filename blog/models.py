@@ -43,13 +43,104 @@ class BlogPostImage(models.Model):
         return str(self.images)
 
 
+class BlogPostSBSGuideSubSection(models.Model):
+    """
+        A model representing a multiple subheadings and sub contents within a step-by-step guide.
+    """
+    # Fields
+    # New fields for subheadings and subcontent
+    sub_heading_number = models.IntegerField(null=True, blank=True,
+                                             help_text='The subheadings number for the step-by-step guide.'
+                                             )
+    sub_heading = models.ManyToManyField(
+        'SubHeading',
+        related_name='step_by_step_guides',
+        help_text='The subheadings for the step-by-step guide.'
+    )
+    sub_content = models.ManyToManyField(
+        'SubContent',
+        related_name='step_by_step_guides',
+        help_text='The sub content for the step-by-step guide.'
+    )
+
+    # Metadata
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'step-by-step guide'
+        verbose_name_plural = 'step-by-step guides'
+        db_table = 'step_by_step_guides'
+
+
+class SubHeading(models.Model):
+    """
+    A model representing a subheading within a step-by-step guide.
+    """
+    # Fields
+    text = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text='The text of the subheading.'
+    )
+
+    # Metadata
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'subheading'
+        verbose_name_plural = 'subheadings'
+        db_table = 'subheadings'
+
+    # Methods
+    def __str__(self):
+        return self.text
+
+
+class SubContent(models.Model):
+    """
+    A model representing a sub content within a step-by-step guide.
+    """
+    # Fields
+    text = models.TextField(null=True,
+                            blank=True,
+                            help_text='The text of the sub content.'
+                            )
+
+    # Metadata
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'subcontent'
+        verbose_name_plural = 'subcontents'
+        db_table = 'sub_contents'
+
+    # Methods
+    def __str__(self):
+        return self.text
+
+
 class BlogStepByStepGuide(models.Model):
+    """
+        A model representing a step-by-step guide within a blog post.
+    """
+    # Fields
     blog_post = models.ForeignKey(
-        'BlogPost', on_delete=models.CASCADE, related_name='paragraphs_list')
-    main_heading = models.CharField(max_length=255, null=True, blank=True)
-    main_content = models.TextField(null=True, blank=True)
-    sub_heading = models.CharField(max_length=255, null=True, blank=True)
-    sub_content = models.TextField(null=True, blank=True)
+        'BlogPost',
+        on_delete=models.CASCADE,
+        related_name='step_by_step_guides',
+        help_text='The blog post that this step-by-step guide belongs to.', null=True, blank=True
+    )
+    main_heading = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text='The main heading of the step-by-step guide.'
+    )
+    main_content = models.TextField(
+        null=True,
+        blank=True,
+        help_text='The main content of the step-by-step guide.'
+    )
+    sbs_guide_sub_fields = models.ManyToManyField(
+        'BlogPostSBSGuideSubSection', related_name='sbs_guide_sub_fields_section')
 
 
 class BlogPost(models.Model):
@@ -62,7 +153,7 @@ class BlogPost(models.Model):
     quote_writer = models.CharField(max_length=255, null=True, blank=True)
     second_paragraph = models.TextField()
     post_images = models.ManyToManyField(
-        BlogPostImage, related_name='post_images')
+        BlogPostImage, related_name='post_images', blank=True)
     paragraph_after_image = models.TextField(null=True, blank=True)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_posts')
