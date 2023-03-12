@@ -50,7 +50,7 @@ INSTALLED_APPS = [
 ]
 
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
-DBBACKUP_STORAGE_OPTIONS = {'location': BASE_DIR / 'DjangoBackup/'}
+DBBACKUP_STORAGE_OPTIONS = {'location': BASE_DIR / 'DjangoBackup'}
 
 # ACCOUNT_AUTHENTICATION_METHOD = 'email'
 # ACCOUNT_EMAIL_REQUIRED = True

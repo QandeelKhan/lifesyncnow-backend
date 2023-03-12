@@ -9,4 +9,4 @@ python3 manage.py makemigrations
 2nd
 python3 manage.py migrate
 3rd
-ython3 manage.py loaddata data.json
+python3 manage.py loaddata data.json
