@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'silk',
     'debug_toolbar',
     'rest_framework_swagger',
+    'dbbackup',
     # 'playground',
     # 'store',
     # 'core',
@@ -47,6 +48,9 @@ INSTALLED_APPS = [
     # 'rest_auth.registration',
     # 'rest_framework.authtoken',
 ]
+
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': BASE_DIR / 'DjangoBackup/'}
 
 # ACCOUNT_AUTHENTICATION_METHOD = 'email'
 # ACCOUNT_EMAIL_REQUIRED = True
