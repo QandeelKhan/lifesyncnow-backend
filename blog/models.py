@@ -215,7 +215,7 @@ class BlogPost(models.Model):
     def save(self, *args, **kwargs):
         """
         Override the save method to set the `most_recent_posts` and `older_posts`
-        fields based on `is_recent` and `is_older` methods respectively.
+        fields based on `is_recent` and `is_older` methods respectively..
         """
         self.most_recent_posts = self.is_recent()
         self.older_posts = self.is_older()
