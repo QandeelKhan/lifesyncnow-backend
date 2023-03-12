@@ -49,6 +49,8 @@ class SBSGuideSubSection(models.Model):
     """
     # Fields
     # New fields for subheadings and subcontent
+    sbs_g_sub_sec_parent = models.ForeignKey('BlogStepByStepGuide', on_delete=models.CASCADE,
+                                             related_name='sbs_guide_sub_sec_to_parent', null=True, blank=True)
     sub_heading_number = models.IntegerField(null=True, blank=True,
                                              help_text='The number the sub sections in each sbs guide within a post.used for multiple purposes'
                                              )
@@ -59,7 +61,7 @@ class SBSGuideSubSection(models.Model):
     )
     sub_content = models.ManyToManyField(
         'SubContent',
-        related_name='step_by_step_guides',
+        related_name='sbs_guide_sub_content',
         help_text='The sub content for the step-by-step guide.'
     )
 
@@ -76,7 +78,8 @@ class SubHeading(models.Model):
     A model representing a subheading within a step-by-step guide.
     """
     # Fields
-    sbs_heading_sub = models.ForeignKey('SBSGuideSubSection', on_delete=models.CASCADE, related_name='sbs_heading_parent', null=True, blank=True)
+    sbs_heading_sub = models.ForeignKey(
+        'SBSGuideSubSection', on_delete=models.CASCADE, related_name='sbs_heading_parent', null=True, blank=True)
     text = models.CharField(
         max_length=255,
         null=True,
