@@ -148,7 +148,15 @@ class BlogStepByStepGuide(models.Model):
 
 
 class BlogPost(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(
+        max_length=100, help_text="The title of the blog post.")
+    slug = models.SlugField(
+        max_length=255,
+        unique=True,
+        null=True,
+        blank=True,
+        help_text="A URL-friendly version of the blog post's title.",
+    )
     cover_image = models.ImageField(upload_to='blog-images/',
                                     storage=fs, validators=[validate_image], null=True, blank=True)
     initial_paragraph = models.TextField()
@@ -160,10 +168,12 @@ class BlogPost(models.Model):
         BlogPostImage, related_name='post_images', blank=True)
     paragraph_after_image = models.TextField(null=True, blank=True)
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_posts')
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_posts', help_text="The author of the blog post.")
     # created_at = models.DateTimeField(auto_now_add=True)
-    created_at = models.DateTimeField(default=timezone.now())
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(default=timezone.now(
+    ), help_text="The date and time when the blog post was created.")
+    updated_at = models.DateTimeField(
+        auto_now=True, help_text="The date and time when the blog post was last updated.")
     most_recent_posts = models.BooleanField(
         default=False, null=True, blank=True)
     featured_posts = models.BooleanField(default=False, null=True, blank=True)
@@ -173,8 +183,20 @@ class BlogPost(models.Model):
     step_by_step_guide = models.ManyToManyField(
         'BlogStepByStepGuide', related_name='blog_posts')
 
+    # Metadata
+    class Meta:
+        ordering = ("-created_at",)
+        verbose_name_plural = "blog posts"
+        db_table = "blog_posts"
+
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        """
+        Returns the absolute URL of the blog post.
+        """
+        return reverse("blog:post_detail", kwargs={"slug": self.slug})
 
     def is_recent(self):
         """
@@ -197,6 +219,9 @@ class BlogPost(models.Model):
         """
         self.most_recent_posts = self.is_recent()
         self.older_posts = self.is_older()
+        #
+        if not self.slug:
+            self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
     # def save(self, *args, **kwargs):
