@@ -129,7 +129,7 @@ class BlogStepByStepGuide(models.Model):
     blog_post = models.ForeignKey(
         'BlogPost',
         on_delete=models.CASCADE,
-        related_name='step_by_step_guides',
+        related_name='blog_post_sbs',
         help_text='The blog post that this step-by-step guide belongs to.', null=True, blank=True
     )
     main_heading = models.CharField(
