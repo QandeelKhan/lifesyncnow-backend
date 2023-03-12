@@ -43,11 +43,13 @@ class BlogPostImage(models.Model):
         return str(self.images)
 
 
-class BlogParagraph(models.Model):
+class BlogStepByStepGuide(models.Model):
     blog_post = models.ForeignKey(
         'BlogPost', on_delete=models.CASCADE, related_name='paragraphs_list')
-    heading = models.CharField(max_length=255, null=True, blank=True)
-    content = models.TextField(null=True, blank=True)
+    main_heading = models.CharField(max_length=255, null=True, blank=True)
+    main_content = models.TextField(null=True, blank=True)
+    sub_heading = models.CharField(max_length=255, null=True, blank=True)
+    sub_content = models.TextField(null=True, blank=True)
 
 
 class BlogPost(models.Model):
@@ -73,8 +75,8 @@ class BlogPost(models.Model):
     older_posts = models.BooleanField(default=False, null=True, blank=True)
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, related_name="post_category")
-    paragraphs = models.ManyToManyField(
-        'BlogParagraph', related_name='blog_posts')
+    step_by_step_guide = models.ManyToManyField(
+        'BlogStepByStepGuide', related_name='blog_posts')
 
     def __str__(self):
         return self.title

@@ -104,6 +104,7 @@ class BlogPostSerializer(serializers.ModelSerializer):
             'most_recent_posts',
             'older_posts',
             'featured_posts',
+            'paragraphs',
             'full_name',
 
         ]
