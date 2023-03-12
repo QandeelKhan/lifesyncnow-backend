@@ -170,8 +170,8 @@ class BlogPost(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_posts', help_text="The author of the blog post.")
     # created_at = models.DateTimeField(auto_now_add=True)
-    created_at = models.DateTimeField(default=timezone.now(
-    ), help_text="The date and time when the blog post was created.")
+    created_at = models.DateTimeField(
+        default=timezone.now, help_text="The date and time when the blog post was created.")
     updated_at = models.DateTimeField(
         auto_now=True, help_text="The date and time when the blog post was last updated.")
     most_recent_posts = models.BooleanField(
