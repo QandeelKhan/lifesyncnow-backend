@@ -53,8 +53,9 @@ provision our smtp server (ad-on Mailgun):
 # DB CREDENTIALS
 Enter the username: ourbloguser
 Enter the password: OurBlogPassword
-Enter the database name: OurBlogDB
+Enter the database name: ourblogdb
 
+pg_dump -h localhost -p 5432 -U ourbloguser ourblogdb > OurBlogDBDumb.sql
 python3 manage.py dumpdata --exclude auth.permission --exclude contenttypes > data.json
 python3 manage.py loaddata data.json
 
