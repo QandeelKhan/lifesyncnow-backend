@@ -3,7 +3,6 @@ source venv-our-blog-backend/bin/activate
 #2: run django server
 python3 manage.py runserver
 
-
 # Last pull required commands:
 1st
 python3 manage.py makemigrations
