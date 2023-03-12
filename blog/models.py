@@ -62,7 +62,7 @@ class SBSGuideSubSection(models.Model):
     sub_content = models.ManyToManyField(
         'SubContent',
         related_name='sbs_guide_sub_content',
-        help_text='The sub content for the step-by-step guide.'
+        help_text='The sub content for the step-by-step guide..'
     )
 
     # Metadata
