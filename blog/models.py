@@ -61,12 +61,12 @@ class SBSGuideSubSection(models.Model):
         blank=True,
         help_text='The number of this subsection within the parent step-by-step guide.'
     )
-    subheadings = models.ManyToManyField(
+    subheadingss = models.ManyToManyField(
         'SubHeading',
         related_name='subsections',
         help_text='The subheadings for this subsection.'
     )
-    subcontents = models.ManyToManyField(
+    subcontentss = models.ManyToManyField(
         'SubContent',
         related_name='subsections',
         help_text='The subcontents for this subsection.'
@@ -171,10 +171,10 @@ class BlogStepByStepGuide(models.Model):
         blank=True,
         help_text='The main content of the step-by-step guide.'
     )
-    sbs_guide_subsections = models.ManyToManyField(
+    sbs_guides_subsections = models.ManyToManyField(
         'SBSGuideSubSection',
         related_name='step_by_step_guides',
-        help_text='The subsections within the step-by-step guide.'
+        help_text='The subsections within the step-by-step guide..'
     )
 
     # Metadata
