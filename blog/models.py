@@ -54,7 +54,7 @@ class SBSGuideSubSection(models.Model):
                                              )
     sub_heading = models.ManyToManyField(
         'SubHeading',
-        related_name='step_by_step_guides',
+        related_name='sbs_guide_sub_heading',
         help_text='The subheadings for the step-by-step guide.'
     )
     sub_content = models.ManyToManyField(
@@ -76,6 +76,7 @@ class SubHeading(models.Model):
     A model representing a subheading within a step-by-step guide.
     """
     # Fields
+    sbs_heading_sub = models.ForeignKey('SBSGuideSubSection', on_delete=models.CASCADE, related_name='sbs_heading_parent', null=True, blank=True)
     text = models.CharField(
         max_length=255,
         null=True,
