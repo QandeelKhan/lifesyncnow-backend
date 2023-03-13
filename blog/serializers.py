@@ -16,8 +16,8 @@ class SubContentSerializer(serializers.ModelSerializer):
 
 
 class SBSGuideSubSectionSerializer(serializers.ModelSerializer):
-    sub_heading = SubHeadingSerializer(many=True)
-    sub_content = SubContentSerializer(many=True)
+    subheadingss = SubHeadingSerializer(many=True)
+    subcontentss = SubContentSerializer(many=True)
 
     class Meta:
         model = SBSGuideSubSection
@@ -25,7 +25,7 @@ class SBSGuideSubSectionSerializer(serializers.ModelSerializer):
 
 
 class SBSGuideSerializer(serializers.ModelSerializer):
-    sbs_guide_sub_fields = SBSGuideSubSectionSerializer(many=True)
+    sbs_guides_subsections = SBSGuideSubSectionSerializer(many=True)
 
     class Meta:
         model = BlogStepByStepGuide

@@ -274,6 +274,7 @@ SIMPLE_JWT = {
 #     "http://127.0.0.1:3000",
 #     "http://127.0.0.1:8000",
 #     "http://localhost:8000",
+#     "https://7245-2400-adc7-3103-2000-59fa-d930-2358-a37e.in.ngrok.io"
 # ]
 
 CORS_ALLOW_ALL_ORIGINS = True

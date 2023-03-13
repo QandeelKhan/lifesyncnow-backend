@@ -219,7 +219,7 @@ class BlogPost(models.Model):
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, related_name="post_category")
     step_by_step_guide = models.ManyToManyField(
-        'BlogStepByStepGuide', related_name='blog_posts')
+        'BlogStepByStepGuide', related_name='blog_posts', null=True, blank=True)
 
     # Metadata
     class Meta:
