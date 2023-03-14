@@ -50,13 +50,37 @@ ALLOWED_HOSTS = ["*"]
 #         'PORT': "25060"
 #     }
 # }
+# without docker
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'ourblogdb',
+#         'HOST': 'localhost',
+#         'USER': 'ourbloguser',
+#         'PASSWORD': 'OurBlogPassword'
+#     }
+# }
+# with docker
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': os.environ.get('POSTGRES_NAME'),
+#         'USER': os.environ.get('POSTGRES_USER'),
+#         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+#         'HOST': "172.18.0.2",
+#         'PORT': 5432,
+#     }
+# }
+# with docker
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ourblogdb',
-        'HOST': 'localhost',
-        'USER': 'ourbloguser',
-        'PASSWORD': 'OurBlogPassword'
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        # because of without stopping the port 5432 of default postgres container which is running on 5432 i mapped the docker container port 5432 to 5433
+        'HOST': "db",
+        'PORT': 5432,
     }
 }
 
