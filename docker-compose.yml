@@ -1,24 +1,38 @@
 services:
   db:
     image: postgres
-    # volumes:
-    #   - ./data/db:/var/lib/postgresql/data
+    container_name: my-postgres-container
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-    restart: always # add this line
+    restart: always
+    ports:
+      - "5432:5432"
     hostname: db
   web:
-    build: .
+    # build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - IMAGE_TAG=latest
+    image: qandeelhaider/our-blog-backend:latest
+    container_name: my-django-container
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/store-front-backend
+      - .:/code
     ports:
       - "8000:8000"
     environment:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - IMAGE_TAG=latest
     depends_on:
       - db
+
+volumes:
+  postgres_data:

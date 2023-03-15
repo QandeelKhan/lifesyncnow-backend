@@ -62,3 +62,7 @@ sudo fuser -k 8000/tcp
 
 python3 manage.py dbbackup
 python3 manage.py dbrestore
+
+
+# way to tag
+docker tag our-blog-backend:latest qandeelhaider/our-blog-backend:latest
