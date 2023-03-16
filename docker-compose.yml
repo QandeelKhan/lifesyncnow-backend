@@ -8,6 +8,7 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - DATABASE_URL=postgres://postgres:postgres@db/postgres
     restart: always
     ports:
       - "5432:5432"
@@ -21,7 +22,9 @@ services:
         - IMAGE_TAG=latest
     image: qandeelhaider/our-blog-backend:latest
     container_name: my-django-container
-    command: python manage.py runserver 0.0.0.0:8000
+    command: sh -c "python manage.py migrate UserManagement && python manage.py migrate Blog && python manage.py migrate &&
+              /wait-for-it.sh db:5432 -- python manage.py runserver 0.0.0.0:8000"
+    # command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
     ports:
@@ -31,8 +34,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - IMAGE_TAG=latest
+      - DATABASE_URL=postgres://postgres:postgres@db/postgres
     depends_on:
       - db
-
 volumes:
   postgres_data:
