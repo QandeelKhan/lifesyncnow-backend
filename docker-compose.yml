@@ -22,11 +22,14 @@ services:
         - IMAGE_TAG=latest
     image: qandeelhaider/our-blog-backend:latest
     container_name: my-django-container
-    command: sh -c "python manage.py migrate UserManagement && python manage.py migrate Blog && python manage.py migrate &&
-              /wait-for-it.sh db:5432 -- python manage.py runserver 0.0.0.0:8000"
+    # command: sh -c "run-migrations &&
+    #           /wait-for-it.sh db:5432 -- python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "./wait-for-it.sh db:5432 -- && ./run-migrations.sh"
+
     # command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/code
+      # - .:/code
+      - ../our-blog-backend:/code
     ports:
       - "8000:8000"
     environment:
