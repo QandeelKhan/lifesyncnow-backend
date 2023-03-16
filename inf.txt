@@ -66,3 +66,9 @@ python3 manage.py dbrestore
 
 # way to tag
 docker tag our-blog-backend:latest qandeelhaider/our-blog-backend:latest
+
+docker inspect my-postgres-container | grep IPAddress
+
+docker-compose run web python3 manage.py migrate
+docker exec -it container_id python manage.py migrate
+docker-compose exec app python manage.py makemigrations

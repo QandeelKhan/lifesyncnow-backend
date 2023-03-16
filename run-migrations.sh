@@ -12,6 +12,7 @@ set -e
 # echo "Postgres is up - running migrations..."
 
 # Run migrations
+python manage.py collectstatic --noinput
 python manage.py makemigrations UserManagement
 python manage.py migrate UserManagement
 python manage.py makemigrations blog

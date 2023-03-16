@@ -8,7 +8,9 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - DATABASE_URL=postgres://postgres:postgres@db/postgres
+      # - DATABASE_URL=postgres://postgres:postgres@db/postgres
+      - DATABASE_URL=postgres://POSTGRES_USER:POSTGRES_PASSWORD@db/172.23.0.2
+
     restart: always
     ports:
       - "5432:5432"
@@ -17,19 +19,21 @@ services:
     # build: .
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./Dockerfile
       args:
         - IMAGE_TAG=latest
     image: qandeelhaider/our-blog-backend:latest
     container_name: my-django-container
     # command: sh -c "run-migrations &&
     #           /wait-for-it.sh db:5432 -- python manage.py runserver 0.0.0.0:8000"
-    command: sh -c "./wait-for-it.sh db:5432 -- && ./run-migrations.sh"
+    command: sh -c "./wait-for-it.sh db:5432 -- && ./run-migrations.sh"    
 
     # command: python manage.py runserver 0.0.0.0:8000
     volumes:
       # - .:/code
-      - ../our-blog-backend:/code
+      - ../our-blog-backend:/code      
+    env_file:
+      - ./.env
     ports:
       - "8000:8000"
     environment:
