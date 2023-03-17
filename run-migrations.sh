@@ -9,7 +9,7 @@ set -e
 #     sleep 1
 # done
 
-# echo "Postgres is up - running migrations..."
+# echo "Postgres is up - running migrations...."
 
 # Run migrations
 python manage.py collectstatic --noinput
