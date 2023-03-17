@@ -74,3 +74,4 @@ docker exec -it container_id python manage.py migrate
 docker-compose exec app python manage.py makemigrations
 docker push qandeelhaider/our-blog-backend:latest
 chmod a+x wait-for-it.sh
+docker-compose logs web
