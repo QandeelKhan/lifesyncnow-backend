@@ -1,6 +1,8 @@
 FROM python:3.9
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+# Install PostgreSQL client
+RUN apt-get update && apt-get install -y postgresql-client && apt-get install -y mysql-client
 RUN mkdir /code
 WORKDIR /code
 COPY requirements.txt /code/
