@@ -1,23 +1,16 @@
 
 from rest_framework import serializers
-from .models import BlogPost, BlogPostImage, Comment, Reply, BlogStepByStepGuide, SubHeading, SubContent, SBSGuideSubSection
+from .models import BlogPost, BlogPostImage, Comment, Reply, BlogStepByStepGuide, SubFields, SBSGuideSubSection
 
 
-class SubHeadingSerializer(serializers.ModelSerializer):
+class SubFieldsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SubHeading
-        fields = '__all__'
-
-
-class SubContentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SubContent
+        model = SubFields
         fields = '__all__'
 
 
 class SBSGuideSubSectionSerializer(serializers.ModelSerializer):
-    subheadingss = SubHeadingSerializer(many=True)
-    subcontentss = SubContentSerializer(many=True)
+    sub_headings_and_contents = SubFieldsSerializer(many=True)
 
     class Meta:
         model = SBSGuideSubSection

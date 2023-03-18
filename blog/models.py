@@ -43,123 +43,22 @@ class BlogPostImage(models.Model):
         return str(self.images)
 
 
-class SBSGuideSubSection(models.Model):
-    """
-    A model representing multiple subheadings and subcontents within a step-by-step guide.
-    """
-    # Fields
-    parent_guide = models.ForeignKey(
-        'BlogStepByStepGuide',
-        on_delete=models.CASCADE,
-        related_name='subsections',
-        null=True,
-        blank=True,
-        help_text='The parent step-by-step guide that this subsection belongs to.'
-    )
-    number = models.PositiveSmallIntegerField(
-        null=True,
-        blank=True,
-        help_text='The number of this subsection within the parent step-by-step guide.'
-    )
-    subheadingss = models.ManyToManyField(
-        'SubHeading',
-        related_name='subsections',
-        help_text='The subheadings for this subsection.'
-    )
-    subcontentss = models.ManyToManyField(
-        'SubContent',
-        related_name='subsections',
-        help_text='The subcontents for this subsection.'
-    )
-
-    # Metadata
-    class Meta:
-        ordering = ['id']
-        verbose_name = 'step-by-step guide subsection'
-        verbose_name_plural = 'step-by-step guide subsections'
-        db_table = 'step_by_step_guide_subsections'
-
-
-class SubHeading(models.Model):
-    """
-    A model representing a subheading within a step-by-step guide subsection.
-    """
-    # Fields
-    parent_subsection = models.ForeignKey(
-        'SBSGuideSubSection',
-        on_delete=models.CASCADE,
-        related_name='subheadings',
-        null=True,
-        blank=True,
-        help_text='The parent subsection that this subheading belongs to.'
-    )
-    text = models.CharField(
-        max_length=255,
-        null=True,
-        blank=True,
-        help_text='The text of this subheading.'
-    )
-
-    # Metadata
-    class Meta:
-        ordering = ['id']
-        verbose_name = 'subheading'
-        verbose_name_plural = 'subheadings'
-        db_table = 'subheadings'
-
-    # Methods
-    def __str__(self):
-        return self.text
-
-
-class SubContent(models.Model):
-    """
-    A model representing a subcontent within a step-by-step guide subsection.
-    """
-    # Fields
-    parent_subsection = models.ForeignKey(
-        'SBSGuideSubSection',
-        on_delete=models.CASCADE,
-        related_name='subcontents',
-        null=True,
-        blank=True,
-        help_text='The parent subsection that this subcontent belongs to.'
-    )
-    text = models.TextField(
-        null=True,
-        blank=True,
-        help_text='The text of this subcontent.'
-    )
-
-    # Metadata
-    class Meta:
-        ordering = ['id']
-        verbose_name = 'subcontent'
-        verbose_name_plural = 'subcontents'
-        db_table = 'subcontents'
-
-    # Methods
-    def __str__(self):
-        return self.text
-
-
 class BlogStepByStepGuide(models.Model):
     """
-        A model representing a step-by-step guide within a blog post.
+    A model representing a step-by-step guide within a blog post.
     """
     # Fields
     blog_post = models.ForeignKey(
         'BlogPost',
         on_delete=models.CASCADE,
         related_name='step_by_step_guides',
-        null=True,
-        blank=True,
-        help_text='The blog post that this step-by-step guide belongs to.')
+        help_text='The blog post that this step-by-step guide belongs to.'
+    )
     sbs_guide_number = models.PositiveSmallIntegerField(
         null=True,
         blank=True,
-        help_text='Number of the sps guides on a post. can be used for multiple purposes')
-
+        help_text='Number of the step-by-step guides on a post. Can be used for multiple purposes.'
+    )
     main_heading = models.CharField(
         max_length=255,
         null=True,
@@ -171,13 +70,11 @@ class BlogStepByStepGuide(models.Model):
         blank=True,
         help_text='The main content of the step-by-step guide.'
     )
-    sbs_guides_subsections = models.ManyToManyField(
-        'SBSGuideSubSection',
-        related_name='step_by_step_guides',
-        help_text='The subsections within the step-by-step guide..'
-    )
 
+    sub_fields_section = models.ManyToManyField(
+        'SBSGuideSubSection', blank=True, null=True)
     # Metadata
+
     class Meta:
         ordering = ['id']
         verbose_name = 'step-by-step guide'
@@ -185,7 +82,71 @@ class BlogStepByStepGuide(models.Model):
         db_table = 'step_by_step_guides'
 
 
+class SBSGuideSubSection(models.Model):
+    """
+    A model representing multiple subheadings and subcontents within a step-by-step guide.
+    """
+    # Fields
+    parent_guide = models.ForeignKey(
+        BlogStepByStepGuide,
+        on_delete=models.CASCADE,
+        related_name='subsections',
+        help_text='The parent step-by-step guide that this subsection belongs to.'
+    )
+    sbs_index = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        help_text='The number of this subsection within the parent step-by-step guide.'
+    )
+    sub_headings_and_contents = models.ManyToManyField(
+        'SubFields',
+        related_name='sub_fields',
+        help_text='The subcontents for this subsection.'
+    )
+
+    # Metadata
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'step-by-step guide subsection'
+        verbose_name_plural = 'step-by-step guide subsections'
+        db_table = 'step_by_step_guide_subsections'
+
+
+class SubFields(models.Model):
+    sbs_guide_sub_section = models.ForeignKey(
+        SBSGuideSubSection,
+        on_delete=models.CASCADE,
+        related_name='sub_fields_parent',
+        help_text='The parent subsection that this subheading belongs to.'
+    )
+    sub_index = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        help_text='The number of this subsection within the parent step-by-step guide.'
+    )
+    sub_heading = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text='The text of this subheading.'
+    )
+    sub_content = models.TextField(
+        null=True,
+        blank=True,
+        help_text='The text of this subcontent.'
+    )
+
+    # Metadata
+    class Meta:
+        ordering = ['id']
+        verbose_name = 'subheading'
+        verbose_name_plural = 'subheadings'
+        db_table = 'subheadings'
+
+
 class BlogPost(models.Model):
+    step_by_step_guide = models.ManyToManyField(
+        BlogStepByStepGuide, related_name='blog_posts', blank=True)
     title = models.CharField(
         max_length=100, help_text="The title of the blog post.")
     slug = models.SlugField(
@@ -218,8 +179,6 @@ class BlogPost(models.Model):
     older_posts = models.BooleanField(default=False, null=True, blank=True)
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, related_name="post_category")
-    step_by_step_guide = models.ManyToManyField(
-        'BlogStepByStepGuide', related_name='blog_posts', null=True, blank=True)
 
     # Metadata
     class Meta:
