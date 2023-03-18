@@ -72,7 +72,7 @@ class BlogStepByStepGuide(models.Model):
     )
 
     sub_fields_section = models.ManyToManyField(
-        'SBSGuideSubSection', blank=True, null=True)
+        'SBSGuideSubSection', blank=True, help_text='The subsections for this step-by-step guide.')
     # Metadata
 
     class Meta:
@@ -93,6 +93,12 @@ class SBSGuideSubSection(models.Model):
         related_name='subsections',
         help_text='The parent step-by-step guide that this subsection belongs to.'
     )
+    blog_post = models.ForeignKey(
+        'BlogPost',
+        on_delete=models.CASCADE,
+        related_name='sbs_subsections',
+        help_text='The blog post that this subsection belongs to.'
+    )
     sbs_index = models.PositiveSmallIntegerField(
         null=True,
         blank=True,
@@ -103,8 +109,23 @@ class SBSGuideSubSection(models.Model):
         related_name='sub_fields',
         help_text='The subcontents for this subsection.'
     )
+    # sub_headings_and_contents = models.ManyToManyField(
+    #     'SubFields',
+    #     related_name='sub_fields',
+    #     help_text='The subcontents for this subsection.'
+    # )
+    # ForeignKey to itself
+    parent_subsection = models.ForeignKey(
+        'self',
+        null=True,
+        blank=True,
+        related_name='subsections',
+        on_delete=models.CASCADE,
+        help_text='The parent subsection that this subsection belongs to.'
+    )
 
     # Metadata
+
     class Meta:
         ordering = ['id']
         verbose_name = 'step-by-step guide subsection'
@@ -139,9 +160,9 @@ class SubFields(models.Model):
     # Metadata
     class Meta:
         ordering = ['id']
-        verbose_name = 'subheading'
-        verbose_name_plural = 'subheadings'
-        db_table = 'subheadings'
+        verbose_name = 'subfield'
+        verbose_name_plural = 'subfields'
+        db_table = 'subfields'
 
 
 class BlogPost(models.Model):
@@ -158,14 +179,15 @@ class BlogPost(models.Model):
     )
     cover_image = models.ImageField(upload_to='blog-images/',
                                     storage=fs, validators=[validate_image], null=True, blank=True)
-    initial_paragraph = models.TextField()
-    paragraph_heading = models.CharField(max_length=255)
+    paragraphs = models.ManyToManyField('BlogParagraph')
+    # initial_paragraph = models.TextField()
+    # paragraph_heading = models.CharField(max_length=255)
     quote = models.CharField(max_length=255, null=True, blank=True)
     quote_writer = models.CharField(max_length=255, null=True, blank=True)
-    second_paragraph = models.TextField()
+    # second_paragraph = models.TextField()
     post_images = models.ManyToManyField(
         BlogPostImage, related_name='post_images', blank=True)
-    paragraph_after_image = models.TextField(null=True, blank=True)
+    # paragraph_after_image = models.TextField(null=True, blank=True)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_posts', help_text="The author of the blog post.")
     # created_at = models.DateTimeField(auto_now_add=True)
@@ -233,6 +255,26 @@ class BlogPost(models.Model):
     #         raise ValueError("A maximum of three posts can be marked as featured posts for each category.")
 
     #     super().save(*args, **kwargs)
+
+
+class BlogParagraph(models.Model):
+    """
+    Model representing a clause within the terms and conditions.
+    """
+    blog_post = models.ForeignKey(
+        BlogPost, on_delete=models.CASCADE, related_name='clauses')
+    paragraph_title = models.CharField(
+        max_length=255, help_text='The title of the clause.')
+    paragraph_content = models.TextField(
+        help_text='The content of the clause.')
+    order = models.PositiveIntegerField(
+        help_text='The order in which the clause should appear in the terms and conditions.')
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return self.paragraph_title
 
 
 class Comment(models.Model):

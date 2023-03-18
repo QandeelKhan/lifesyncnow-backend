@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'UserManagement',
     'blog',
+    'legal',
     # 'allauth',
     # 'allauth.account',
     # 'allauth.socialaccount',

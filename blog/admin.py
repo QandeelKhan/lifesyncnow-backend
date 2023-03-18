@@ -91,14 +91,54 @@
 # admin.site.register(Comment, CommentAdmin)
 # admin.site.register(Reply, ReplyAdmin)
 from django.contrib import admin
-from .models import Category, BlogPost, BlogPostImage, Comment, Reply, BlogStepByStepGuide, SBSGuideSubSection, SubFields
+from .models import Category, BlogPost, BlogPostImage, Comment, Reply, BlogStepByStepGuide, SBSGuideSubSection, SubFields, BlogParagraph
 
 # Register your models here.
 admin.site.register(Category)
-admin.site.register(BlogPost)
+# admin.site.register(BlogPost)
+
+
+# @admin.register(BlogStepByStepGuide)
+class SBSGuideSubSectionInline(admin.TabularInline):
+    model = SBSGuideSubSection
+    extra = 1
+
+
+@admin.register(SBSGuideSubSection)
+class SBSGuideSubSectionAdmin(admin.ModelAdmin):
+    inlines = [SBSGuideSubSectionInline]
+    list_display = ('parent_guide', 'sbs_index',)
+    list_filter = ('sub_headings_and_contents',)
+    # exclude = ('paragraphs', 'step_by_step_guide',)
+
+
+class BlogSBSGuideInline(admin.TabularInline):
+    model = BlogStepByStepGuide
+    extra = 1
+
+
+class ParagraphsInline(admin.TabularInline):
+    model = BlogParagraph
+    extra = 1
+
+
+@admin.register(BlogPost)
+class BlogPostAdmin(admin.ModelAdmin):
+    inlines = [ParagraphsInline, BlogSBSGuideInline, SBSGuideSubSectionInline]
+    list_display = ('title', 'slug', 'cover_image',)
+    list_filter = ('step_by_step_guide',)
+    exclude = ('paragraphs', 'step_by_step_guide',)
+
+
+@admin.register(BlogParagraph)
+class ParagraphAdmin(admin.ModelAdmin):
+    list_display = (
+        'paragraph_title', 'paragraph_content',)
+
+
 admin.site.register(BlogPostImage)
 admin.site.register(BlogStepByStepGuide)
-admin.site.register(SBSGuideSubSection)
+# admin.site.register(SBSGuideSubSection)
 admin.site.register(SubFields)
 admin.site.register(Comment)
 admin.site.register(Reply)
