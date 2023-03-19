@@ -10,6 +10,7 @@ urlpatterns = [
     path('api/', include('blog.urls')),
     path('api/', include('legal.urls')),
     path('api/', include('ContactUs.urls')),
+    path('api/', include('UserProfile.urls')),
     # path('auth/', include('djoser.urls')),
     # path('auth/', include('djoser.urls.authtoken')),
     # django all auth

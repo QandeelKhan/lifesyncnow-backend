@@ -31,6 +31,13 @@ class Category(models.Model):
 
     def __str__(self):
         return str(self.category_name)
+
+
+class TopicType(models.Model):
+    topic = models.CharField(max_length=100, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.topic)
 # for more then one images and image_links we created BlogPostImage model
 
 
@@ -198,6 +205,8 @@ class BlogPost(models.Model):
     older_posts = models.BooleanField(default=False, null=True, blank=True)
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, related_name="post_category")
+    topic_type = models.ForeignKey(
+        TopicType, on_delete=models.CASCADE, related_name="post_topic", null=True, blank=True)
 
     # Metadata
     class Meta:
@@ -239,19 +248,6 @@ class BlogPost(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
-
-    # def save(self, *args, **kwargs):
-    # # check if the post is being marked as a featured post
-    #     if self.featured_posts:
-    #         # count how many featured posts already exist for this category
-    #         num_featured_posts = BlogPost.objects.filter(
-    #         category=self.category, featured_posts=True).count()
-
-    #     # if there are already three featured posts for this category, raise an exception
-    #     if num_featured_posts >= 3:
-    #         raise ValueError("A maximum of three posts can be marked as featured posts for each category.")
-
-    #     super().save(*args, **kwargs)
 
 
 class BlogParagraph(models.Model):

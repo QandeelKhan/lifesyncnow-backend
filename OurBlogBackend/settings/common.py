@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'dbbackup',
     'ContactUs',
+    'UserProfile',
     # 'playground',
     # 'store',
     # 'core',
