@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'rest_framework_swagger',
     'dbbackup',
+    'ContactUs',
     # 'playground',
     # 'store',
     # 'core',

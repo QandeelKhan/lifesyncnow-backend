@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from .models import BlogPost, BlogPostImage, Comment, Reply, BlogStepByStepGuide, SubFields, SBSGuideSubSection
+from .models import BlogPost, BlogPostImage, Comment, Reply, BlogStepByStepGuide, SubFields, SBSGuideSubSection, BlogParagraph
 
 
 class SubFieldsSerializer(serializers.ModelSerializer):
@@ -92,7 +92,15 @@ class CommentSerializer(serializers.ModelSerializer):
 #         fields = '__all__'
 
 
+class BlogParagraphSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BlogParagraph
+        fields = ('id', 'paragraph_title', 'paragraph_content')
+
+
 class BlogPostSerializer(serializers.ModelSerializer):
+    paragraphs = BlogParagraphSerializer(
+        source='blog_paragraphs.all', many=True)
     post_images = BlogPostImageSerializer(many=True)
     step_by_step_guide = SBSGuideSerializer(many=True)
     comments = CommentSerializer(many=True, read_only=True)
@@ -110,6 +118,7 @@ class BlogPostSerializer(serializers.ModelSerializer):
             'comments',
             'comment_count',
             'title',
+            'content',
             'cover_image',
             # 'initial_paragraph',
             # 'paragraph_heading',

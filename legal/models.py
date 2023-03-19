@@ -36,7 +36,7 @@ class Clause(models.Model):
         ordering = ['order']
 
     def __str__(self):
-        return self.title
+        return self.clue_title
 
 
 class UserAgreement(models.Model):

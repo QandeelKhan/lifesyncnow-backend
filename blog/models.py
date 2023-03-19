@@ -157,19 +157,15 @@ class SubFields(models.Model):
         help_text='The text of this subcontent.'
     )
 
-    # Metadata
-    class Meta:
-        ordering = ['id']
-        verbose_name = 'subfield'
-        verbose_name_plural = 'subfields'
-        db_table = 'subfields'
-
 
 class BlogPost(models.Model):
     step_by_step_guide = models.ManyToManyField(
         BlogStepByStepGuide, related_name='blog_posts', blank=True)
     title = models.CharField(
         max_length=100, help_text="The title of the blog post.")
+    content = models.TextField(
+        null=True, blank=True, help_text="The title of the blog post.")
+
     slug = models.SlugField(
         max_length=255,
         unique=True,
@@ -179,7 +175,8 @@ class BlogPost(models.Model):
     )
     cover_image = models.ImageField(upload_to='blog-images/',
                                     storage=fs, validators=[validate_image], null=True, blank=True)
-    paragraphs = models.ManyToManyField('BlogParagraph')
+    paragraphs = models.ManyToManyField(
+        'BlogParagraph', related_name='paragraphs')
     # initial_paragraph = models.TextField()
     # paragraph_heading = models.CharField(max_length=255)
     quote = models.CharField(max_length=255, null=True, blank=True)
@@ -262,19 +259,26 @@ class BlogParagraph(models.Model):
     Model representing a clause within the terms and conditions.
     """
     blog_post = models.ForeignKey(
-        BlogPost, on_delete=models.CASCADE, related_name='clauses')
+        'BlogPost', on_delete=models.CASCADE, related_name='blog_paragraphs', blank=True, null=True)
     paragraph_title = models.CharField(
-        max_length=255, help_text='The title of the clause.')
-    paragraph_content = models.TextField(
-        help_text='The content of the clause.')
-    order = models.PositiveIntegerField(
-        help_text='The order in which the clause should appear in the terms and conditions.')
+        max_length=255, help_text='The title of the clause..', null=True, blank=True)
+    paragraph_content = models.TextField(null=True, blank=True,
+                                         help_text='The content of the clause..')
+    order = models.PositiveIntegerField(default=0,
+                                        help_text='The order in which the clause should appear in the terms and conditions..', blank=True, null=True)
 
-    class Meta:
-        ordering = ['order']
+    # class Meta:
+    #     ordering = ['order']
 
     def __str__(self):
         return self.paragraph_title
+
+    # Metadata
+    # class Meta:
+    #     ordering = ['id']
+    #     verbose_name = 'BlogParagraph'
+    #     verbose_name_plural = 'BlogParagraphs'
+    #     db_table = 'BlogParagraphs'
 
 
 class Comment(models.Model):
