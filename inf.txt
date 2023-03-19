@@ -75,3 +75,8 @@ docker-compose exec app python manage.py makemigrations
 docker push qandeelhaider/our-blog-backend:latest
 chmod a+x wait-for-it.sh
 docker-compose logs web
+docker volume ls
+# backup data
+docker exec -t <your-postgres-container-id> pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+# restore data
+cat your_dump.sql | docker exec -i <your-postgres-container-id> psql -U myuser
