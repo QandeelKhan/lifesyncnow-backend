@@ -6,11 +6,36 @@ class StepByStepGuide(models.Model):
     A model representing a step-by-step guide within a blog post.
     """
     # Fields
+    # Fields
+    SIMPLE = 'simple'
+    BULLETED = 'bulleted'
+    NUMBERED = 'numbered'
+    ASTERISK = 'asterisk'
+    DOTTED = 'dotted'
+    STYLES_CHOICES = [
+        (SIMPLE, 'Simple'),
+        (BULLETED, 'Bulleted'),
+        (BULLETED, 'Bulleted'),
+        (NUMBERED, 'Numbered'),
+        (ASTERISK, 'Asterisk'),
+        (DOTTED, 'Dotted'),
+        # Add more choices as needed
+    ]
+    list_style = models.CharField(max_length=50, choices=STYLES_CHOICES, default=SIMPLE,
+                                  help_text='The list style of the paragraph.', null=True, blank=True,)
+    privacy_policy = models.ForeignKey(
+        'PrivacyPolicy',
+        on_delete=models.CASCADE,
+        related_name='privacy_policy',
+        help_text='The post that this step-by-step guide belongs to.',
+        null=True,
+        blank=True
+    )
     contact_us = models.ForeignKey(
         'ContactUs',
         on_delete=models.CASCADE,
         related_name='step_by_step_guides_contact_specific',
-        help_text='The blog post that this step-by-step guide belongs to.'
+        help_text='The post that this step-by-step guide belongs to.'
     )
     blog_paragraphs = models.ForeignKey(
         'Paragraph',
@@ -64,6 +89,8 @@ class Paragraph(models.Model):
     """
     contact_us = models.ForeignKey(
         'ContactUs', on_delete=models.CASCADE, related_name='contact_paragraphs', blank=True, null=True)
+    advertise_with_us = models.ForeignKey(
+        'AdvertiseWithWellPlusGood', on_delete=models.CASCADE, related_name='advertise_with_us', blank=True, null=True)
     paragraph_title = models.CharField(
         max_length=255, help_text='The title of the clause..', null=True, blank=True)
     paragraph_content = models.TextField(null=True, blank=True,

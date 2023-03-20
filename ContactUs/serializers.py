@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import ContactUs
+from .models import ContactUs, AdvertiseWithWellPlusGood, PrivacyPolicy
 from .paragraph_with_sbs import Paragraph, StepByStepGuide
 
 
@@ -27,3 +27,15 @@ class ContactUsSerializer(serializers.ModelSerializer):
         model = ContactUs
         fields = ('id', 'title', 'content', 'author',
                   'created_at', 'updated_at', 'paragraphs',)
+
+
+class AdvertiseWithWellPlusGoodSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdvertiseWithWellPlusGood
+        fields = '__all__'
+
+
+class PrivacyPolicySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PrivacyPolicy
+        fields = '__all__'

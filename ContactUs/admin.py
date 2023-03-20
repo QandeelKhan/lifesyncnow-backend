@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ContactUs, Paragraph
+from .models import ContactUs, Paragraph, AdvertiseWithWellPlusGood, PrivacyPolicy
 from .paragraph_with_sbs import StepByStepGuide, Paragraph
 
 
@@ -50,5 +50,7 @@ class BlogStepByStepGuideAdmin(admin.ModelAdmin):
     exclude = ('sbs_self_refer',)
     # inlines = [StepByStepGuideInline]
 
+
 # admin.site.register(StepByStepGuide)
-# admin.site.register(SubFields)
+admin.site.register(AdvertiseWithWellPlusGood)
+admin.site.register(PrivacyPolicy)
