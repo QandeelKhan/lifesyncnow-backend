@@ -1,24 +1,24 @@
 from django.contrib import admin
 from .models import ContactUs, Paragraph
-from .sbs_model import StepByStepGuid, SBSGuideSubSection, SubFields
+from .paragraph_with_sbs import StepByStepGuide, Paragraph
 
 
-class SBSGuideSubSectionInline(admin.TabularInline):
-    model = SBSGuideSubSection
+class StepByStepGuideInline(admin.TabularInline):
+    model = StepByStepGuide
     extra = 1
 
 
-@admin.register(SBSGuideSubSection)
-class SBSGuideSubSectionAdmin(admin.ModelAdmin):
-    inlines = [SBSGuideSubSectionInline]
-    list_display = ('parent_guide', 'sbs_index',)
-    list_filter = ('sub_headings_and_contents',)
+# @admin.register(SBSGuideSubSection)
+# class SBSGuideSubSectionAdmin(admin.ModelAdmin):
+#     inlines = [SBSGuideSubSectionInline]
+#     list_display = ('parent_guide', 'sbs_index',)
+#     list_filter = ('sub_headings_and_contents',)
     # exclude = ('paragraphs', 'step_by_step_guide',)
 
 
-class ContactUsSBSGuideInline(admin.TabularInline):
-    model = StepByStepGuid
-    extra = 1
+# class ContactUsSBSGuideInline(admin.TabularInline):
+#     model = StepByStepGuid
+#     extra = 1
 
 
 class ParagraphsInline(admin.TabularInline):
@@ -28,18 +28,27 @@ class ParagraphsInline(admin.TabularInline):
 
 @admin.register(ContactUs)
 class ContactUsAdmin(admin.ModelAdmin):
-    inlines = [ParagraphsInline, ContactUsSBSGuideInline,
-               SBSGuideSubSectionInline]
+    inlines = [ParagraphsInline]
     list_display = ('title', 'content',)
-    list_filter = ('step_by_step_guide',)
-    exclude = ('paragraphs', 'step_by_step_guide',)
+    # list_filter = ('step_by_step_guide',)
+    exclude = ('paragraphs_self_refer', 'paragraphs',)
 
 
 @admin.register(Paragraph)
 class ParagraphAdmin(admin.ModelAdmin):
     list_display = (
         'paragraph_title', 'paragraph_content',)
+    exclude = ('step_by_step_guide', 'paragraphs_self_refer',)
+    inlines = [StepByStepGuideInline]
 
 
-admin.site.register(StepByStepGuid)
-admin.site.register(SubFields)
+@admin.register(StepByStepGuide)
+class BlogStepByStepGuideAdmin(admin.ModelAdmin):
+    list_display = ('sbs_guide_number',
+                    'sbs_index',)
+    # list_filter = ('contact_us', 'sbs_guide_number')
+    exclude = ('sbs_self_refer',)
+    # inlines = [StepByStepGuideInline]
+
+# admin.site.register(StepByStepGuide)
+# admin.site.register(SubFields)

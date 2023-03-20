@@ -1,24 +1,25 @@
 
 from rest_framework import serializers
-from .models import BlogPost, BlogPostImage, Comment, Reply, BlogStepByStepGuide, SubFields, SBSGuideSubSection, BlogParagraph
+from .models import BlogPost, BlogPostImage, Comment, Reply, BlogParagraph
+from .paragraph_with_sbs import BlogStepByStepGuide
 
 
-class SubFieldsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SubFields
-        fields = '__all__'
+# class SubFieldsSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = SubFields
+#         fields = '__all__'
 
 
-class SBSGuideSubSectionSerializer(serializers.ModelSerializer):
-    sub_headings_and_contents = SubFieldsSerializer(many=True)
+# class SBSGuideSubSectionSerializer(serializers.ModelSerializer):
+#     sub_headings_and_contents = SubFieldsSerializer(many=True)
 
-    class Meta:
-        model = SBSGuideSubSection
-        fields = '__all__'
+#     class Meta:
+#         model = SBSGuideSubSection
+#         fields = '__all__'
 
 
 class SBSGuideSerializer(serializers.ModelSerializer):
-    sbs_guides_subsections = SBSGuideSubSectionSerializer(many=True)
+    # sbs_guides_subsections = SBSGuideSubSectionSerializer(many=True)
 
     class Meta:
         model = BlogStepByStepGuide
@@ -93,16 +94,19 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class BlogParagraphSerializer(serializers.ModelSerializer):
+    step_by_step_guide = SBSGuideSerializer(many=True)
+
     class Meta:
         model = BlogParagraph
-        fields = ('id', 'paragraph_title', 'paragraph_content')
+        fields = ('id', 'paragraph_title',
+                  'paragraph_content', 'step_by_step_guide')
 
 
 class BlogPostSerializer(serializers.ModelSerializer):
     paragraphs = BlogParagraphSerializer(
         source='blog_paragraphs.all', many=True)
     post_images = BlogPostImageSerializer(many=True)
-    step_by_step_guide = SBSGuideSerializer(many=True)
+    # step_by_step_guide = SBSGuideSerializer(many=True)
     comments = CommentSerializer(many=True, read_only=True)
     comment_count = serializers.SerializerMethodField()
     author_first_name = serializers.SerializerMethodField()
@@ -137,7 +141,7 @@ class BlogPostSerializer(serializers.ModelSerializer):
             'most_recent_posts',
             'older_posts',
             'featured_posts',
-            'step_by_step_guide',
+            # 'step_by_step_guide',
             # 'sps_guide',
             'full_name',
 

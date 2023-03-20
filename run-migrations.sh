@@ -15,8 +15,13 @@ set -e
 python manage.py collectstatic --noinput
 python manage.py makemigrations UserManagement
 python manage.py migrate UserManagement
+python manage.py makemigrations UserProfile
+python manage.py migrate UserProfile
 python manage.py makemigrations blog
 python manage.py migrate blog
+python manage.py makemigrations ContactUs
+python manage.py migrate ContactUs
+python manage.py makemigrations
 python manage.py migrate
 echo "Migrations complete"
 echo "running our django server"

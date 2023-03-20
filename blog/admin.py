@@ -91,30 +91,31 @@
 # admin.site.register(Comment, CommentAdmin)
 # admin.site.register(Reply, ReplyAdmin)
 from django.contrib import admin
-from .models import Category, BlogPost, BlogPostImage, Comment, Reply, BlogStepByStepGuide, SBSGuideSubSection, SubFields, BlogParagraph
+from .models import Category, BlogPost, BlogPostImage, Comment, Reply, TopicType
+from .paragraph_with_sbs import BlogStepByStepGuide, BlogParagraph
 
 # Register your models here.
-admin.site.register(Category)
-# admin.site.register(BlogPost)
+# admin.site.register(Category)
+# # admin.site.register(BlogPost)
 
 
-# @admin.register(BlogStepByStepGuide)
-class SBSGuideSubSectionInline(admin.TabularInline):
-    model = SBSGuideSubSection
-    extra = 1
+# # @admin.register(BlogStepByStepGuide)
+# class SBSGuideSubSectionInline(admin.TabularInline):
+#     model = SBSGuideSubSection
+#     extra = 1
 
 
-@admin.register(SBSGuideSubSection)
-class SBSGuideSubSectionAdmin(admin.ModelAdmin):
-    inlines = [SBSGuideSubSectionInline]
-    list_display = ('parent_guide', 'sbs_index',)
-    list_filter = ('sub_headings_and_contents',)
-    # exclude = ('paragraphs', 'step_by_step_guide',)
+# @admin.register(SBSGuideSubSection)
+# class SBSGuideSubSectionAdmin(admin.ModelAdmin):
+#     inlines = [SBSGuideSubSectionInline]
+#     list_display = ('parent_guide', 'sbs_index',)
+#     list_filter = ('sub_headings_and_contents',)
+#     # exclude = ('paragraphs', 'step_by_step_guide',)
 
 
-class BlogSBSGuideInline(admin.TabularInline):
-    model = BlogStepByStepGuide
-    extra = 1
+# class BlogSBSGuideInline(admin.TabularInline):
+#     model = BlogStepByStepGuide
+#     extra = 1
 
 
 class ParagraphsInline(admin.TabularInline):
@@ -122,23 +123,47 @@ class ParagraphsInline(admin.TabularInline):
     extra = 1
 
 
+class BlogStepByStepGuideInline(admin.TabularInline):
+    model = BlogStepByStepGuide
+    extra = 1
+
+
 @admin.register(BlogPost)
 class BlogPostAdmin(admin.ModelAdmin):
-    inlines = [ParagraphsInline, BlogSBSGuideInline, SBSGuideSubSectionInline]
+    inlines = [ParagraphsInline]
     list_display = ('title', 'slug', 'cover_image',)
-    list_filter = ('step_by_step_guide',)
-    exclude = ('paragraphs', 'step_by_step_guide',)
+    # list_filter = ('step_by_step_guide',)
+    exclude = ('paragraphs', 'step_by_step_guides')
 
 
 @admin.register(BlogParagraph)
 class ParagraphAdmin(admin.ModelAdmin):
     list_display = (
         'paragraph_title', 'paragraph_content',)
+    inlines = [BlogStepByStepGuideInline, ParagraphsInline]
 
 
+@admin.register(BlogStepByStepGuide)
+class BlogStepByStepGuideAdmin(admin.ModelAdmin):
+    list_display = ('blog_post', 'sbs_guide_number',
+                    'sbs_index',)
+    list_filter = ('blog_post', 'sbs_guide_number')
+    exclude = ('sbs_self_refer',)
+    inlines = [BlogStepByStepGuideInline]
+
+
+# @admin.register(SubFields)
+# class SubFieldsAdmin(admin.ModelAdmin):
+#     list_display = ('sbs_guide_sub_section', 'sub_heading')
+#     list_filter = ('sbs_guide_sub_section__blog_post',
+#                    'sbs_guide_sub_section__sbs_guide_number')
+
+
+admin.site.register(Category)
 admin.site.register(BlogPostImage)
-admin.site.register(BlogStepByStepGuide)
-# admin.site.register(SBSGuideSubSection)
-admin.site.register(SubFields)
+# admin.site.register(BlogPost)
 admin.site.register(Comment)
 admin.site.register(Reply)
+# admin.site.register(BlogParagraph)
+# admin.site.register(BlogStepByStepGuide)
+admin.site.register(TopicType)
