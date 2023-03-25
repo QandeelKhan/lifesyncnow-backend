@@ -10,7 +10,7 @@ from django.core.files.storage import default_storage
 from decouple import config
 from django.utils import timezone
 from .paragraph_with_sbs import BlogParagraph
-
+from UserProfile.models import UserProfile
 # make custom storage backend for image
 USE_SPACES = config('USE_SPACES', cast=bool, default=False)
 if USE_SPACES:
@@ -51,6 +51,39 @@ class BlogPostImage(models.Model):
         return str(self.images)
 
 
+class Category(models.Model):
+    category_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.category_name)
+
+
+class FeaturedPost(models.Model):
+    post = models.OneToOneField(
+        'BlogPost',
+        on_delete=models.CASCADE,
+        related_name="featured_post",
+        primary_key=True,
+    )
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.CASCADE,
+        related_name="featured_posts",
+    )
+
+    class Meta:
+        verbose_name_plural = "featured posts"
+
+    def save(self, *args, **kwargs):
+        # Check if there are already three featured posts for this category
+        if FeaturedPost.objects.filter(category=self.category).count() >= 3:
+            # Get the oldest featured post for this category and delete it
+            oldest_featured_post = FeaturedPost.objects.filter(
+                category=self.category).order_by("post__created_at").first()
+            oldest_featured_post.delete()
+        super().save(*args, **kwargs)
+
+
 STATUS = (
     (0, "Draft"),
     (1, "Publish")
@@ -86,6 +119,8 @@ class BlogPost(models.Model):
     # paragraph_after_image = models.TextField(null=True, blank=True)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_posts', help_text="The author of the blog post.")
+    author_profile = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE, related_name='blog_posts', help_text="The author of the blog post.", null=True, blank=True)
     # created_at = models.DateTimeField(auto_now_add=True)
 
     created_at = models.DateTimeField(
@@ -140,6 +175,7 @@ class BlogPost(models.Model):
         #
         if not self.slug:
             self.slug = slugify(self.title)
+
         super().save(*args, **kwargs)
 
 

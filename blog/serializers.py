@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from .models import BlogPost, BlogPostImage, Comment, Reply, BlogParagraph
 from .paragraph_with_sbs import BlogStepByStepGuide
-
+# from UserProfile.serializers import UserProfileSerializer
 
 # class SubFieldsSerializer(serializers.ModelSerializer):
 #     class Meta:
@@ -111,6 +111,8 @@ class BlogPostSerializer(serializers.ModelSerializer):
     comment_count = serializers.SerializerMethodField()
     author_first_name = serializers.SerializerMethodField()
     author_last_name = serializers.SerializerMethodField()
+    # author_profile = UserProfileSerializer()
+    # author_profile = UserProfileSerializer(source='author.userprofile')
     full_name = serializers.SerializerMethodField()
     category_name = serializers.ReadOnlyField(source='category.category_name')
 
@@ -132,6 +134,7 @@ class BlogPostSerializer(serializers.ModelSerializer):
             'quote_writer',
             # 'paragraph_after_image',
             'author',
+            # 'author_profile',
             'author_first_name',
             'author_last_name',
             'created_at',
@@ -143,6 +146,7 @@ class BlogPostSerializer(serializers.ModelSerializer):
             'featured_posts',
             # 'step_by_step_guide',
             # 'sps_guide',
+            'slug',
             'full_name',
 
         ]

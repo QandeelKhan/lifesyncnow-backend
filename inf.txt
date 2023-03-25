@@ -87,3 +87,4 @@ python3 manage.py flush --no-input
 sudo systemctl stop postgresql 
 docker compose up
 
+    

@@ -3,6 +3,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from .models import BlogPost, Comment, Reply
 from .serializers import BlogPostSerializer, CommentSerializer, ReplySerializer
+from django.urls import reverse
 
 
 class BlogPostListView(generics.ListAPIView):
@@ -15,6 +16,14 @@ class BlogPostDetailView(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
     queryset = BlogPost.objects.all()
     serializer_class = BlogPostSerializer
+    # lookup_fields = ['slug', 'pk']
+    lookup_field = 'slug'
+
+    # def get_absolute_url(self):
+    #     """
+    #     Returns the absolute URL of the blog post.
+    #     """
+    #     return reverse("blog:post_detail", kwargs={"slug_field": self.slug_field})
 
 
 class BlogPostCreateView(generics.CreateAPIView):

@@ -3,7 +3,8 @@ from .views import BlogPostListView, BlogPostDetailView, BlogPostCreateView, Blo
 
 urlpatterns = [
     path('blog/posts-list', BlogPostListView.as_view(), name='blog-list'),
-    path('blog/post/<pk>/', BlogPostDetailView.as_view(), name='blog-detail'),
+    # path('blog/post/<pk>/', BlogPostDetailView.as_view(), name='blog-detail'),
+    path('blog/post/<slug:slug>/', BlogPostDetailView.as_view(), name='blog-detail'),
     path('blog/post/create/', BlogPostCreateView.as_view(), name='blog-create'),
     path('blog/post/<pk>/update/', BlogPostUpdateView.as_view(), name='blog-update'),
     path('<pk>/delete/', BlogPostDeleteView.as_view(), name='blog-delete'),

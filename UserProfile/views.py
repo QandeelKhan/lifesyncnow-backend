@@ -13,6 +13,7 @@ from .serializers import UserProfileSerializer
 class UserProfileView(generics.ListAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
+    lookup_field = 'user_slug'
     # permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
