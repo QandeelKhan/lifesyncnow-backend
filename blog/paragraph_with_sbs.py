@@ -1,4 +1,22 @@
 from django.db import models
+from django.core.files.storage import default_storage
+from decouple import config
+from django.core.files.storage import FileSystemStorage
+from PIL import Image
+
+USE_SPACES = config('USE_SPACES', cast=bool, default=False)
+if USE_SPACES:
+    fs = default_storage
+else:
+    fs = FileSystemStorage(location='space-our-blog-backend/media')
+
+
+def validate_image(image):
+    try:
+        img = Image.open(image)
+        img.verify()
+    except (IOError, SyntaxError) as e:
+        raise ValidationError("Invalid image: %s" % e)
 
 
 class BlogStepByStepGuide(models.Model):
@@ -37,6 +55,8 @@ class BlogStepByStepGuide(models.Model):
         blank=True,
         help_text='Number of the step-by-step guides on a post. Can be used for multiple purposes.'
     )
+    sbs_image = models.ImageField(upload_to='blog-images/sbs-guide-images',
+                                  storage=fs, validators=[validate_image], blank=True, null=True)
 
     sub_heading = models.CharField(
         max_length=255,
@@ -79,6 +99,8 @@ class BlogParagraph(models.Model):
         'BlogPost', on_delete=models.CASCADE, related_name='blog_paragraphs', blank=True, null=True)
     paragraph_title = models.CharField(
         max_length=255, help_text='The title of the clause..', null=True, blank=True)
+    paragraph_image = models.ImageField(upload_to='blog-images/paragraph-images',
+                                        storage=fs, validators=[validate_image], blank=True, null=True)
     paragraph_content = models.TextField(null=True, blank=True,
                                          help_text='The content of the clause..')
     step_by_step_guide = models.ManyToManyField(
