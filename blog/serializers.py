@@ -104,12 +104,16 @@ class TopicFeaturedPostSerializer(serializers.ModelSerializer):
 
 class TopicTypeSerializer(serializers.ModelSerializer):
     # topic_featured_post = TopicFeaturedPostSerializer(many=True)
+    post = serializers.SerializerMethodField()
 
     class Meta:
         model = TopicType
         # fields = ['topic', 'topic_featured']
-        # fields = ['topic_name', 'topic_featured_post', 'post']
-        fields = '__all__'
+        fields = ['topic_name', 'topic_featured_post', 'post']
+        # fields = '__all__'
+
+    def get_post(self, obj):
+        return obj.post.all()
 
 
 class BlogParagraphSerializer(serializers.ModelSerializer):
