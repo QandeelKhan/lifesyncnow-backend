@@ -10,7 +10,7 @@ class PrivacyPolicy(models.Model):
     content = models.TextField(
         null=True, blank=True, help_text="The content of the about page.")
     paragraphs_privacy_policy = models.ManyToManyField(
-        'Paragraph', related_name='paragraphs_privacy_policy', null=True, blank=True)
+        'Paragraph', related_name='paragraphs_privacy_policy', blank=True)
     author_privacy_policy = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author_privacy_policy', help_text="The author of the contact us page.", null=True, blank=True)
     created_at = models.DateTimeField(
@@ -34,7 +34,7 @@ class AdvertiseWithWellPlusGood(models.Model):
     content = models.TextField(
         null=True, blank=True, help_text="The content of the about page.")
     paragraphs_advertise_well_good = models.ManyToManyField(
-        'Paragraph', related_name='paragraphs_advertise_well_good', null=True, blank=True)
+        'Paragraph', related_name='paragraphs_advertise_well_good', blank=True)
     author_advertise_well_good = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='advertise_well_good', help_text="The author of the contact us page.")
     created_at = models.DateTimeField(
@@ -58,7 +58,7 @@ class ContactUs(models.Model):
     content = models.TextField(
         null=True, blank=True, help_text="The content of the about page.")
     paragraphs = models.ManyToManyField(
-        'Paragraph', related_name='paragraphs', null=True, blank=True)
+        'Paragraph', related_name='paragraphs', blank=True)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='contact_us', help_text="The author of the contact us page.")
     created_at = models.DateTimeField(

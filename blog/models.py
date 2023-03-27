@@ -26,19 +26,6 @@ def validate_image(image):
     except (IOError, SyntaxError) as e:
         raise ValidationError("Invalid image: %s" % e)
 
-
-class Category(models.Model):
-    category_name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return str(self.category_name)
-
-
-class TopicType(models.Model):
-    topic = models.CharField(max_length=100, null=True, blank=True)
-
-    def __str__(self):
-        return str(self.topic)
 # for more then one images and image_links we created BlogPostImage model
 
 
@@ -53,33 +40,50 @@ class BlogPostImage(models.Model):
 
 class Category(models.Model):
     category_name = models.CharField(max_length=100)
+    categorized_topics = models.ManyToManyField(
+        'TopicType', related_name='categorized_topic', blank=True)
 
     def __str__(self):
         return str(self.category_name)
 
 
-class FeaturedPost(models.Model):
-    post = models.OneToOneField(
+class TopicType(models.Model):
+    topic_name = models.CharField(max_length=100, null=True, blank=True)
+    topic_featured_post = models.ManyToManyField(
+        'TopicFeaturedPost', related_name='topic_featured_posts', null=True, blank=True)
+    post = models.ManyToManyField(
         'BlogPost',
-        on_delete=models.CASCADE,
+        # on_delete=models.DO_NOTHING,  # or DO_NOTHING
         related_name="featured_post",
-        primary_key=True,
+        # null=True,
+        blank=True
     )
-    category = models.ForeignKey(
-        Category,
-        on_delete=models.CASCADE,
-        related_name="featured_posts",
-    )
+
+    def __str__(self):
+        return str(self.topic_name)
+
+
+class TopicFeaturedPost(models.Model):
+    featured_topic_type = models.OneToOneField(
+        TopicType, on_delete=models.DO_NOTHING, related_name='featured_posts', unique=True, blank=True)
 
     class Meta:
-        verbose_name_plural = "featured posts"
+        verbose_name_plural = "topic featured posts"
 
+    # def save(self, *args, **kwargs):
+    #     # Check if there are already three featured posts for this category
+    #     if TopicFeaturedPost.objects.filter(category=self.category).count() >= 3:
+    #         # Get the oldest featured post for this category and delete it
+    #         oldest_featured_post = TopicFeaturedPost.objects.filter(
+    #             category=self.category).order_by("post__created_at").first()
+    #         oldest_featured_post.delete()
+    #     super().save(*args, **kwargs)
     def save(self, *args, **kwargs):
-        # Check if there are already three featured posts for this category
-        if FeaturedPost.objects.filter(category=self.category).count() >= 3:
-            # Get the oldest featured post for this category and delete it
-            oldest_featured_post = FeaturedPost.objects.filter(
-                category=self.category).order_by("post__created_at").first()
+        # Check if there are already three featured posts for this topic type
+        if TopicFeaturedPost.objects.filter(featured_topic_type=self.featured_topic_type).count() > 3:
+            # Get the oldest featured post for this topic type and delete it
+            oldest_featured_post = TopicFeaturedPost.objects.filter(
+                featured_topic_type=self.featured_topic_type).order_by("post__created_at").first()
             oldest_featured_post.delete()
         super().save(*args, **kwargs)
 
@@ -109,20 +113,14 @@ class BlogPost(models.Model):
                                     storage=fs, validators=[validate_image], null=True, blank=True)
     paragraphs = models.ManyToManyField(
         BlogParagraph, related_name='paragraphs')
-    # initial_paragraph = models.TextField()
-    # paragraph_heading = models.CharField(max_length=255)
     quote = models.CharField(max_length=255, null=True, blank=True)
     quote_writer = models.CharField(max_length=255, null=True, blank=True)
-    # second_paragraph = models.TextField()
     post_images = models.ManyToManyField(
         BlogPostImage, related_name='post_images', blank=True)
-    # paragraph_after_image = models.TextField(null=True, blank=True)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_posts', help_text="The author of the blog post.")
     author_profile = models.ForeignKey(
         UserProfile, on_delete=models.CASCADE, related_name='blog_posts', help_text="The author of the blog post.", null=True, blank=True)
-    # created_at = models.DateTimeField(auto_now_add=True)
-
     created_at = models.DateTimeField(
         default=timezone.now, help_text="The date and time when the blog post was created.")
     updated_at = models.DateTimeField(

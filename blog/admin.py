@@ -91,11 +91,17 @@
 # admin.site.register(Comment, CommentAdmin)
 # admin.site.register(Reply, ReplyAdmin)
 from django.contrib import admin
-from .models import Category, BlogPost, BlogPostImage, Comment, Reply, TopicType
+from .models import Category, BlogPost, BlogPostImage, Comment, Reply, TopicType, TopicFeaturedPost
 from .paragraph_with_sbs import BlogStepByStepGuide, BlogParagraph
 
 # Register your models here.
-# admin.site.register(Category)
+admin.site.register(Category)
+# @admin.register(Category)
+# class BlogPostAdmin(admin.ModelAdmin):
+#     inlines = [ParagraphsInline]
+#     list_display = ('title', 'slug', 'cover_image',)
+#     # list_filter = ('step_by_step_guide',)
+#     exclude = ('paragraphs', 'step_by_step_guides')
 # # admin.site.register(BlogPost)
 
 
@@ -159,11 +165,11 @@ class BlogStepByStepGuideAdmin(admin.ModelAdmin):
 #                    'sbs_guide_sub_section__sbs_guide_number')
 
 
-admin.site.register(Category)
+# admin.site.register(Category)
 admin.site.register(BlogPostImage)
 # admin.site.register(BlogPost)
 admin.site.register(Comment)
 admin.site.register(Reply)
 # admin.site.register(BlogParagraph)
-# admin.site.register(BlogStepByStepGuide)
+admin.site.register(TopicFeaturedPost)
 admin.site.register(TopicType)

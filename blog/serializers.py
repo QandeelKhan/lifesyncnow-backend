@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from .models import BlogPost, BlogPostImage, Comment, Reply, BlogParagraph
+from .models import BlogPost, BlogPostImage, Comment, Reply, BlogParagraph, TopicType, TopicFeaturedPost
 from .paragraph_with_sbs import BlogStepByStepGuide
 # from UserProfile.serializers import UserProfileSerializer
 
@@ -93,6 +93,25 @@ class CommentSerializer(serializers.ModelSerializer):
 #         fields = '__all__'
 
 
+class TopicFeaturedPostSerializer(serializers.ModelSerializer):
+    # post = serializers.SerializerMethodField()
+
+    class Meta:
+        model = TopicFeaturedPost
+        fields = ['featured_topic_type']
+        # fields = '__all__'
+
+
+class TopicTypeSerializer(serializers.ModelSerializer):
+    # topic_featured_post = TopicFeaturedPostSerializer(many=True)
+
+    class Meta:
+        model = TopicType
+        # fields = ['topic', 'topic_featured']
+        # fields = ['topic_name', 'topic_featured_post', 'post']
+        fields = '__all__'
+
+
 class BlogParagraphSerializer(serializers.ModelSerializer):
     step_by_step_guide = SBSGuideSerializer(many=True)
 
@@ -103,6 +122,9 @@ class BlogParagraphSerializer(serializers.ModelSerializer):
 
 
 class BlogPostSerializer(serializers.ModelSerializer):
+    # topic_featured_posts = TopicFeaturedPostSerializer(
+    #     many=True, read_only=True)
+    topic_type = TopicTypeSerializer(read_only=True)
     paragraphs = BlogParagraphSerializer(
         source='blog_paragraphs.all', many=True)
     post_images = BlogPostImageSerializer(many=True)
@@ -120,15 +142,13 @@ class BlogPostSerializer(serializers.ModelSerializer):
         model = BlogPost
         fields = [
             'id',
+            # 'topic_featured_posts',
             'post_images',
             'comments',
             'comment_count',
             'title',
             'content',
             'cover_image',
-            # 'initial_paragraph',
-            # 'paragraph_heading',
-            # 'second_paragraph',
             'paragraphs',
             'quote',
             'quote_writer',
@@ -148,7 +168,7 @@ class BlogPostSerializer(serializers.ModelSerializer):
             # 'sps_guide',
             'slug',
             'full_name',
-
+            'topic_type',
         ]
         depth = 1
 
