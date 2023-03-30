@@ -56,8 +56,8 @@ class UserProfile(models.Model):
     bio = models.TextField(null=True, blank=True)
     profile_image = models.ImageField(upload_to='profile-images/',
                                       storage=fs, validators=[validate_image], null=True, blank=True)
-    role = models.ForeignKey(
-        Role, on_delete=models.CASCADE, related_name="user_role")
+    role = models.OneToOneField(
+        Role, on_delete=models.CASCADE, related_name="user_role", null=True, blank=True)
     country = models.CharField(max_length=150, null=True, blank=True)
     city = models.CharField(max_length=150, null=True, blank=True)
     twitter_acc = models.CharField(max_length=300, null=True, blank=True)
@@ -79,9 +79,10 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
         # User instance is newly created
         UserProfile.objects.create(user=instance,
-                                   first_name=instance.first_name,
-                                   last_name=instance.last_name,
+                                   #    first_name=instance.first_name,
+                                   #    last_name=instance.last_name,
                                    email=instance.email,
+                                   #    email=instance.email,
                                    user_slug=instance.user_slug,
                                    ),
     else:

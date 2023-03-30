@@ -11,6 +11,7 @@ from decouple import config
 from django.utils import timezone
 from .paragraph_with_sbs import BlogParagraph
 from UserProfile.models import UserProfile
+from django.template.defaultfilters import slugify
 # make custom storage backend for image
 USE_SPACES = config('USE_SPACES', cast=bool, default=False)
 if USE_SPACES:
@@ -40,50 +41,64 @@ class BlogPostImage(models.Model):
 
 class Category(models.Model):
     category_name = models.CharField(max_length=100)
-    categorized_topics = models.ManyToManyField(
-        'TopicType', related_name='categorized_topic', blank=True)
+    category_slug = models.SlugField(
+        max_length=255,
+        null=True,
+        blank=True,
+    )
+    # categorized_topics = models.ManyToManyField(
+    #     'Topic', related_name='categorized_topic', blank=True)
 
     def __str__(self):
         return str(self.category_name)
 
+    def save(self, *args, **kwargs):
+        if not self.category_slug:
+            self.category_slug = slugify(self.category_name)
+        super().save(*args, **kwargs)
 
-class TopicType(models.Model):
+
+class Topic(models.Model):
     topic_name = models.CharField(max_length=100, null=True, blank=True)
-    topic_featured_post = models.ManyToManyField(
-        'TopicFeaturedPost', related_name='topic_featured_posts', null=True, blank=True)
-    post = models.ManyToManyField(
-        'BlogPost',
-        # on_delete=models.DO_NOTHING,  # or DO_NOTHING
-        related_name="featured_post",
-        # null=True,
-        blank=True
+    topic_slug = models.SlugField(
+        max_length=255,
+        null=True,
+        blank=True,
     )
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, related_name='topics', null=True, blank=True)
+    # topic_featured_post = models.ManyToManyField(
+    #     'TopicFeaturedPost', related_name='topic_featured_posts', null=True, blank=True)
+    # post = models.ManyToManyField(
+    #     'BlogPost',
+    #     # on_delete=models.DO_NOTHING,  # or DO_NOTHING
+    #     related_name="featured_post",
+    #     # null=True,
+    #     blank=True
+    # )
 
     def __str__(self):
         return str(self.topic_name)
 
+    def save(self, *args, **kwargs):
+        if not self.topic_slug:
+            self.topic_slug = slugify(self.topic_name)
+        super().save(*args, **kwargs)
+
 
 class TopicFeaturedPost(models.Model):
-    featured_topic_type = models.OneToOneField(
-        TopicType, on_delete=models.DO_NOTHING, related_name='featured_posts', unique=True, blank=True)
+    featured_topic = models.ForeignKey(
+        Topic, on_delete=models.CASCADE, related_name='featured_posts')
 
-    class Meta:
-        verbose_name_plural = "topic featured posts"
+    post = models.ForeignKey(
+        'BlogPost', on_delete=models.CASCADE, related_name='featured_in')
 
-    # def save(self, *args, **kwargs):
-    #     # Check if there are already three featured posts for this category
-    #     if TopicFeaturedPost.objects.filter(category=self.category).count() >= 3:
-    #         # Get the oldest featured post for this category and delete it
-    #         oldest_featured_post = TopicFeaturedPost.objects.filter(
-    #             category=self.category).order_by("post__created_at").first()
-    #         oldest_featured_post.delete()
-    #     super().save(*args, **kwargs)
     def save(self, *args, **kwargs):
-        # Check if there are already three featured posts for this topic type
-        if TopicFeaturedPost.objects.filter(featured_topic_type=self.featured_topic_type).count() > 3:
-            # Get the oldest featured post for this topic type and delete it
-            oldest_featured_post = TopicFeaturedPost.objects.filter(
-                featured_topic_type=self.featured_topic_type).order_by("post__created_at").first()
+        # Check if there are already three featured posts for this topic
+        if self.featured_topic.featured_posts.count() >= 3:
+            # Get the oldest featured post for this topic and delete it
+            oldest_featured_post = self.featured_topic.featured_posts.order_by(
+                'post__created_at').first()
             oldest_featured_post.delete()
         super().save(*args, **kwargs)
 
@@ -131,8 +146,8 @@ class BlogPost(models.Model):
     older_posts = models.BooleanField(default=False, null=True, blank=True)
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, related_name="post_category")
-    topic_type = models.ForeignKey(
-        TopicType, on_delete=models.CASCADE, related_name="post_topic", null=True, blank=True)
+    topic = models.ForeignKey(
+        Topic, on_delete=models.CASCADE, related_name="posts", null=True, blank=True)
 
     # Metadata
     class Meta:

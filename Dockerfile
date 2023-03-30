@@ -1,6 +1,5 @@
 # this is a multi stage file,using a multi-stage build to separate the build environment from the runtime environment. This can help reduce the size of the final image.
 # Build stage
-FROM python:3.9 AS build
 FROM python:3.9
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1

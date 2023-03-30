@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from .models import BlogPost, BlogPostImage, Comment, Reply, BlogParagraph, TopicType, TopicFeaturedPost
+from .models import BlogPost, BlogPostImage, Comment, Reply, BlogParagraph, Topic, TopicFeaturedPost, Category
 from .paragraph_with_sbs import BlogStepByStepGuide
 # from UserProfile.serializers import UserProfileSerializer
 
@@ -84,14 +84,6 @@ class CommentSerializer(serializers.ModelSerializer):
     def get_comment_count(self, obj):
         return obj.replies.count()
 
-# class BlogPostSerializer(serializers.ModelSerializer):
-#     post_images = BlogPostImageSerializer(many=True)
-#     comments = CommentSerializer(many=True, read_only=True)
-
-#     class Meta:
-#         model = BlogPost
-#         fields = '__all__'
-
 
 class TopicFeaturedPostSerializer(serializers.ModelSerializer):
     # post = serializers.SerializerMethodField()
@@ -102,18 +94,42 @@ class TopicFeaturedPostSerializer(serializers.ModelSerializer):
         # fields = '__all__'
 
 
-class TopicTypeSerializer(serializers.ModelSerializer):
-    # topic_featured_post = TopicFeaturedPostSerializer(many=True)
-    post = serializers.SerializerMethodField()
+class CategorySerializer(serializers.ModelSerializer):
+    topics_name = serializers.SerializerMethodField()
+    topic_slug = serializers.SerializerMethodField()
 
     class Meta:
-        model = TopicType
-        # fields = ['topic', 'topic_featured']
-        fields = ['topic_name', 'topic_featured_post', 'post']
-        # fields = '__all__'
+        model = Category
+        fields = ['category_name', 'category_slug',
+                  'topics_name', 'topic_slug']
 
-    def get_post(self, obj):
-        return obj.post.all()
+    def get_topics_name(self, obj):
+        topics = obj.topics.all()
+        return [topic.topic_name for topic in topics]
+
+    def get_topic_slug(self, obj):
+        topics = obj.topics.all()
+        return [topic.topic_slug for topic in topics]
+
+    # Add the `topics_name` field directly to the serializer's fields
+    # to get it out of nesting.
+    # def to_representation(self, instance):
+    #     rep = super().to_representation(instance)
+    #     rep['topics_name'] = self.get_topics_name(instance)
+    #     return rep
+
+
+class TopicSerializer(serializers.ModelSerializer):
+    category = CategorySerializer()
+
+    class Meta:
+        model = Topic
+        # fields = ['topic', 'topic_featured']
+        fields = ['topic_name', 'topic_slug', 'category']
+
+    def get_topics_name(self, obj):
+        categories = obj.category.all()
+        return [category.category_name for category in categories]
 
 
 class BlogParagraphSerializer(serializers.ModelSerializer):
@@ -128,7 +144,9 @@ class BlogParagraphSerializer(serializers.ModelSerializer):
 class BlogPostSerializer(serializers.ModelSerializer):
     # topic_featured_posts = TopicFeaturedPostSerializer(
     #     many=True, read_only=True)
-    topic_type = TopicTypeSerializer(read_only=True)
+    topic = TopicSerializer(read_only=True)
+    topics_name = serializers.SerializerMethodField()
+    topic_slug = serializers.SerializerMethodField()
     paragraphs = BlogParagraphSerializer(
         source='blog_paragraphs.all', many=True)
     post_images = BlogPostImageSerializer(many=True)
@@ -172,7 +190,9 @@ class BlogPostSerializer(serializers.ModelSerializer):
             # 'sps_guide',
             'slug',
             'full_name',
-            'topic_type',
+            'topic',
+            'topics_name',
+            'topic_slug',
         ]
         depth = 1
 
@@ -187,3 +207,11 @@ class BlogPostSerializer(serializers.ModelSerializer):
 
     def get_full_name(self, obj):
         return f"{obj.author.first_name} {obj.author.last_name}"
+
+    def get_topics_name(self, obj):
+        topics = obj.topic.category.topics.all()
+        return [topic.topic_name for topic in topics]
+
+    def get_topic_slug(self, obj):
+        topics = obj.topic.category.topics.all()
+        return [topic.topic_slug for topic in topics]

@@ -91,11 +91,10 @@
 # admin.site.register(Comment, CommentAdmin)
 # admin.site.register(Reply, ReplyAdmin)
 from django.contrib import admin
-from .models import Category, BlogPost, BlogPostImage, Comment, Reply, TopicType, TopicFeaturedPost
+from .models import Category, BlogPost, BlogPostImage, Comment, Reply, Topic, TopicFeaturedPost
 from .paragraph_with_sbs import BlogStepByStepGuide, BlogParagraph
 
 # Register your models here.
-admin.site.register(Category)
 # @admin.register(Category)
 # class BlogPostAdmin(admin.ModelAdmin):
 #     inlines = [ParagraphsInline]
@@ -172,4 +171,5 @@ admin.site.register(Comment)
 admin.site.register(Reply)
 # admin.site.register(BlogParagraph)
 admin.site.register(TopicFeaturedPost)
-admin.site.register(TopicType)
+admin.site.register(Topic)
+admin.site.register(Category)

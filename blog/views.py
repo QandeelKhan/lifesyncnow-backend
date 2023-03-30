@@ -1,15 +1,54 @@
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from .models import BlogPost, Comment, Reply
-from .serializers import BlogPostSerializer, CommentSerializer, ReplySerializer
+from .models import BlogPost, Comment, Reply, Topic, Category
+from .serializers import BlogPostSerializer, CommentSerializer, ReplySerializer, Topic, TopicSerializer
 from django.urls import reverse
+from django.shortcuts import get_object_or_404
+from django.db.models import Q
+
+
+class BlogPostByCategoryView(generics.ListAPIView):
+    serializer_class = BlogPostSerializer
+
+    def get_queryset(self):
+        category_slug = self.kwargs.get('category_slug')
+        return BlogPost.objects.filter(category__category_slug=category_slug)
 
 
 class BlogPostListView(generics.ListAPIView):
     permission_classes = [AllowAny]
     queryset = BlogPost.objects.all()
     serializer_class = BlogPostSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.query_params.get('search', None)
+        if search_query:
+            queryset = queryset.filter(
+                Q(title__icontains=search_query) |
+                Q(content__icontains=search_query)
+            )
+        return queryset
+
+
+class TopicListView(generics.ListAPIView):
+    queryset = Topic.objects.all()
+    serializer_class = TopicSerializer
+    lookup_field = 'topic_slug'
+
+
+class BlogPostListByCategoryAndTopicAPIView(generics.ListAPIView):
+    serializer_class = BlogPostSerializer
+
+    def get_queryset(self):
+        category_slug = self.kwargs.get('category_slug')
+        topic_slug = self.kwargs.get('topic_slug')
+        category = get_object_or_404(Category, category_slug=category_slug)
+        topic = get_object_or_404(
+            Topic, topic_slug=topic_slug, category=category)
+        queryset = BlogPost.objects.filter(topic=topic)
+        return queryset
 
 
 class BlogPostDetailView(generics.RetrieveAPIView):
