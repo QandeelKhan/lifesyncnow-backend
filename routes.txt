@@ -1,0 +1,10 @@
+for all posts:
+localhost:8000/api/blog/posts-list
+page template:
+http://localhost:8000/api/page-templates/
+posts by categorized topics:
+http://localhost:8000/api/blog/category/skin-care-tips/acne-care/
+posts by category:
+http://localhost:8000/api/blog/category/skin-care-tips/
+get post detail by slug
+http://localhost:8000/api/blog/post/coffee-quiz/

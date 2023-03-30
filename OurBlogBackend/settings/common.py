@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'dbbackup',
     'ContactUs',
     'UserProfile',
+    'PageTemplate',
     # 'playground',
     # 'store',
     # 'core',
