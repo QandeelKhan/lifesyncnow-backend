@@ -10,8 +10,7 @@ class StepByStepGuideSerializer(serializers.ModelSerializer):
 
 
 class ParagraphSerializer(serializers.ModelSerializer):
-    step_by_step_guide = StepByStepGuideSerializer(
-        source='blog_paragraphs.all', many=True)
+    step_by_step_guide = StepByStepGuideSerializer(many=True)
 
     class Meta:
         model = Paragraph
@@ -30,12 +29,16 @@ class ContactUsSerializer(serializers.ModelSerializer):
 
 
 class AdvertiseWithWellPlusGoodSerializer(serializers.ModelSerializer):
+    paragraphs_advertise_well_good = ParagraphSerializer(many=True)
+
     class Meta:
         model = AdvertiseWithWellPlusGood
         fields = '__all__'
 
 
 class PrivacyPolicySerializer(serializers.ModelSerializer):
+    paragraphs_privacy_policy = ParagraphSerializer(many=True)
+
     class Meta:
         model = PrivacyPolicy
         fields = '__all__'

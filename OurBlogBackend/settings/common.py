@@ -53,8 +53,16 @@ INSTALLED_APPS = [
     # 'rest_framework.authtoken',
 ]
 
+
+# Backup settings
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DBBACKUP_STORAGE_OPTIONS = {'location': BASE_DIR / 'DjangoBackup'}
+DBBACKUP_CLEANUP_KEEP = 3  # number of backups to keep
+DBBACKUP_EXTENSION = 'backup'
+DBBACKUP_CLEANUP_EXTENSION = 'backup'
+# Restore settings
+DBBACKUP_RESTORE_OPTIONS = ['--noinput']
+DBBACKUP_RESTORE_DB = 'default'
 
 # ACCOUNT_AUTHENTICATION_METHOD = 'email'
 # ACCOUNT_EMAIL_REQUIRED = True

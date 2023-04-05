@@ -78,11 +78,26 @@ docker-compose logs web
 docker volume ls
 # backup data
 docker exec -t my-postgres-container pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+docker-compose exec db pg_dump -U postgres -Fc postgres > my_backup.dump
 # restore data
-cat another_backup.sql | docker exec -i my-postgres-container psql -U postgres
+cat dump_data.sql | docker exec -i my-postgres-container psql -U postgres
 # to clear db
 python3 manage.py flush --no-input
 
 
 sudo systemctl stop postgresql 
 docker compose up
+
+# to backup the volume
+docker run --rm \
+  -v postgres_data:/volume \
+  -v $(pwd):/backup \
+  busybox \
+  tar czvf /backup/my_backed_up_volume.tar.gz /volume
+
+# to restore the volume
+docker run --rm \
+  -v postgres_data:/volume \
+  -v $(pwd):/backup \
+  busybox \
+  tar xzvf /backup/my_backed_up_volume.tar.gz

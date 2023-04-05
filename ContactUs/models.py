@@ -10,18 +10,18 @@ class PrivacyPolicy(models.Model):
     content = models.TextField(
         null=True, blank=True, help_text="The content of the about page.")
     paragraphs_privacy_policy = models.ManyToManyField(
-        'Paragraph', related_name='paragraphs_privacy_policy', blank=True)
+        'Paragraph', related_name='privacy_policy', blank=True)
     author_privacy_policy = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author_privacy_policy', help_text="The author of the contact us page.", null=True, blank=True)
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author_privacy_policy', help_text="The author of the privacy policy us page.", null=True, blank=True)
     created_at = models.DateTimeField(
-        default=timezone.now, help_text="The date and time when the contact us page was created.")
+        default=timezone.now, help_text="The date and time when the privacy policy page was created.")
     updated_at = models.DateTimeField(
-        auto_now=True, help_text="The date and time when the contact us post was last updated.")
+        auto_now=True)
 
     # Metadata
     class Meta:
         ordering = ("-created_at",)
-        verbose_name_plural = "contact us"
+        verbose_name_plural = "Privacy Policy"
         db_table = "PrivacyPolicy"
 
     def __str__(self):
@@ -45,7 +45,6 @@ class AdvertiseWithWellPlusGood(models.Model):
     # Metadata
     class Meta:
         ordering = ("-created_at",)
-        verbose_name_plural = "contact us"
         db_table = "Advertise-with-well-plus-good"
 
     def __str__(self):
@@ -58,9 +57,9 @@ class ContactUs(models.Model):
     content = models.TextField(
         null=True, blank=True, help_text="The content of the about page.")
     paragraphs = models.ManyToManyField(
-        'Paragraph', related_name='paragraphs', blank=True)
+        'Paragraph', related_name='paragraphs_contact_us', blank=True)
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='contact_us', help_text="The author of the contact us page.")
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author_contact_us', help_text="The author of the contact us page.")
     created_at = models.DateTimeField(
         default=timezone.now, help_text="The date and time when the contact us page was created.")
     updated_at = models.DateTimeField(
