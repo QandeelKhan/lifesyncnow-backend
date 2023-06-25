@@ -13,7 +13,7 @@ USE_SPACES = config('USE_SPACES', cast=bool, default=False)
 if USE_SPACES:
     fs = default_storage
 else:
-    fs = FileSystemStorage(location='space-our-blog-backend/media')
+    fs = FileSystemStorage(location='space-lifesyncnow/media')
 
 
 def validate_image(image):
@@ -37,8 +37,8 @@ User = get_user_model()
 class UserProfile(models.Model):
     first_name = models.CharField(max_length=255, null=True)
     last_name = models.CharField(max_length=255, blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE, related_name='user_profile')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,
+                                on_delete=models.CASCADE, related_name='user_profile')
     email = models.EmailField(
         verbose_name='Email',
         max_length=255,

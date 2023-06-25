@@ -17,7 +17,7 @@ USE_SPACES = config('USE_SPACES', cast=bool, default=False)
 if USE_SPACES:
     fs = default_storage
 else:
-    fs = FileSystemStorage(location='space-our-blog-backend/media')
+    fs = FileSystemStorage(location='space-lifesyncnow/media')
 
 
 def validate_image(image):

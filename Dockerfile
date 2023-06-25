@@ -1,44 +1,33 @@
-# this is a multi stage file,using a multi-stage build to separate the build environment from the runtime environment. This can help reduce the size of the final image.
 # Build stage
-FROM python:3.9
+FROM python:3.11-alpine3.18 as builder
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-# Install PostgreSQL client
-RUN apt-get update && apt-get install -y postgresql-client postgresql
-RUN mkdir /code
-WORKDIR /code
-COPY requirements.txt /code/
-# we user --user to make the docker file to be responsible to install this package in a home directory and not in a low level directory that might require the root priveleges.
-# RUN pip install --user -r requirements.txt
-# RUN pip3 install --user -r requirements.txt
-RUN pip3 install --user --no-cache-dir -r requirements.txt
-COPY . /code/
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+RUN apk update && apk add --no-cache postgresql-client postgresql mariadb-dev build-base python3-dev \
+    cairo-dev \
+    jpeg-dev \
+    libffi-dev \
+    pango-dev \
+    musl-dev \
+    bash \
+    libpq-dev \
+    libpq
 
-# ---------------------------------------------------------
-# FROM python:3.9-slim-buster as builder
-# ENV PYTHONDONTWRITEBYTECODE=1
-# ENV PYTHONUNBUFFERED=1
-# RUN apt-get update && apt-get install -y postgresql-client
-# RUN mkdir /build
-# WORKDIR /build
-# COPY requirements.txt /build/
-# RUN pip install --no-cache-dir -r requirements.txt
-# # Install psycopg2
-# RUN pip3 install psycopg2-binary
-# COPY . /build/
+RUN mkdir /app
+WORKDIR /app
+COPY requirements.txt /app/
+COPY . /app/
+COPY wait-for-it.sh /app/
+COPY run-migrations.sh /app/
+RUN chmod +x /app/wait-for-it.sh /app/run-migrations.sh
+RUN pip3 install --user -r requirements.txt
 
-# # Runtime stage
-# # Stage 2: Production environment
-# FROM python:3.9-slim-buster
-# ENV PYTHONDONTWRITEBYTECODE=1
-# ENV PYTHONUNBUFFERED=1
-# RUN apt-get update && apt-get install -y postgresql-client postgresql
-# RUN mkdir /code
-# COPY --from=builder /build /code
-# WORKDIR /code
-# VOLUME /var/lib/postgresql/data
-# COPY ./entrypoint.sh /entrypoint.sh
-# RUN chmod +x /entrypoint.sh
-# ENTRYPOINT ["/entrypoint.sh"]
-# CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+FROM python:3.11-alpine3.18
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+RUN apk update && apk add postgresql-libs mariadb-connector-c bash
+# RUN apk update && apk add --no-cache postgresql-libs mariadb-connector-c bash
+WORKDIR /root/our-blog-backend
+COPY --from=builder /root/.local /root/.local
+COPY --from=builder /app /root/our-blog-backend
+ENV PATH=/root/.local/bin:$PATH
+EXPOSE 8000

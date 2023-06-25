@@ -5,17 +5,17 @@ from storages.backends.s3boto3 import S3Boto3Storage
 # this will make upload our static folder into digitalocean,
 
 
-class StaticRootS3Boto3Storage(S3Boto3Storage):
-    location = "static"
-    default_acl = 'public-read'
+class StaticStorage(S3Boto3Storage):
+    bucket_name = 'life-sync-now-bucket'
+    location = 'space-lifesyncnow/static'
+    # just for aws not for the digitalocean
 
 
-# this will make anything uploading through our models will go there in media folder on digitalocean.
-
-
-class MediaRootS3Boto3Storage(S3Boto3Storage):
-    location = "media"
-    default_acl = 'public-read'
+class MediaStorage(S3Boto3Storage):
+    bucket_name = 'life-sync-now-bucket'
+    location = 'space-lifesyncnow/media'
+    # default_acl = None
+    # file_overwrite = False
 
 
 # above provided locations we set similar to our local settings so the directories

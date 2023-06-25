@@ -1,6 +1,6 @@
 from .common import *
 import os
-# import dj_database_url
+import dj_database_url
 # from decouple import config
 from dotenv import load_dotenv
 load_dotenv()
@@ -8,7 +8,6 @@ load_dotenv()
 DEBUG = True
 
 # ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", default=['*']).split()
-ALLOWED_HOSTS = ["*"]
 
 # DATABASES
 
@@ -79,6 +78,8 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         # because of without stopping the port 5432 of default postgres container which is running on 5432 i mapped the docker container port 5432 to 5433
+        # in development we can use name as * to connect with any name but in production we have to write the actual hostname of our db
+        # 'HOST': "*",
         'HOST': "db",
         # 'HOST': "172.23.0.2",
         'PORT': 5432,

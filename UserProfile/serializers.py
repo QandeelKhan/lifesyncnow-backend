@@ -18,10 +18,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
         return f"{obj.first_name} {obj.last_name}"
 
     def get_role_name(self, obj):
-        #     # this will return a dictionary
-        #     return {obj.role.role_name}
-        # and this will return it simply outside of the dictionary in the json object
-        return obj.role.role_name
+        if obj.role:
+            return obj.role.role_name
+        # if role field have no value
+        return None
 
     def get_related_posts(self, obj):
         posts = obj.user.blog_posts.all()

@@ -1,0 +1,3 @@
+venv*
+# */migrations  (this way will not work for dockerignore file) see below.
+**/migrations/

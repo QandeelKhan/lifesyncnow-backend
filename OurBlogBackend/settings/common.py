@@ -10,7 +10,6 @@ load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-ALLOWED_HOSTS = ["*"]
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
@@ -32,6 +31,7 @@ INSTALLED_APPS = [
     'ContactUs',
     'UserProfile',
     'PageTemplate',
+    'Subscriber',
     # 'playground',
     # 'store',
     # 'core',
@@ -279,18 +279,6 @@ SIMPLE_JWT = {
     'JTI_CLAIM': 'jti',
 }
 
-# -----CORS
-
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:3000",
-#     "http://127.0.0.1:3000",
-#     "http://127.0.0.1:8000",
-#     "http://localhost:8000",
-#     "https://7245-2400-adc7-3103-2000-59fa-d930-2358-a37e.in.ngrok.io"
-# ]
-
-CORS_ALLOW_ALL_ORIGINS = True
-
 PASSWORD_RESET_TIMEOUT = 900  # 900 Sec = 15min
 
 # for react origin
@@ -300,3 +288,35 @@ SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 X_FRAME_OPTIONS = 'DENY'
+
+# -----CORS
+
+# For development purposes.
+# but in django 4
+# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+ALLOWED_HOSTS = ["https://lifesyncnow.com", "https://www.lifesyncnow.com", "http://0.0.0.0:8000",
+                 "http://localhost:8000", "http://localhost:3000", "http://0.0.0.0:8000", "https://life-sync-now-bucket.s3.amazonaws.com", "http://lifesyncnow-web:8000", "http://lifesyncnow-web", "lifesyncnow-web"]
+PASSWORD_RESET_TIMEOUT = 900  # 900 Sec = 15min
+# For development purposes.
+
+# we whitelist localhost:3000 because that's where frontend will be served
+# CORS_ORIGIN_WHITELIST = ['*']
+# CORS_ORIGIN_WHITELIST = ["https://lifesyncnow.com", "https://www.lifesyncnow.com", "http://0.0.0.0:8000",
+#                          "http://localhost:8000", "http://localhost:3000", "http://0.0.0.0:8000", "*"]
+CORS_ORIGIN_WHITELIST = ["https://lifesyncnow.com", "https://www.lifesyncnow.com", "http://0.0.0.0:8000",
+                         "http://localhost:8000", "http://localhost:3000", "http://0.0.0.0:8000", "https://life-sync-now-bucket.s3.amazonaws.com", "http://lifesyncnow-web:8000", "http://lifesyncnow-web"]
+CORS_ORIGIN_ALLOW_ALL = True
+
+# for react origin
+# SECURE_CONTENT_TYPE_NOSNIFF = False
+# SECURE_BROWSER_XSS_FILTER = False
+# SECURE_SSL_REDIRECT = False
+# SESSION_COOKIE_SECURE = False
+# CSRF_COOKIE_SECURE = False
+# X_FRAME_OPTIONS = 'DENY'
+# CSRF_TRUSTED_ORIGINS = ["*"]
+CORS_ALLOWED_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
+CSRF_TRUSTED_ORIGINS = ["https://lifesyncnow.com", "https://www.lifesyncnow.com", "http://0.0.0.0:8000",
+                        "http://localhost:8000", "http://localhost:3000", "http://0.0.0.0:8000", "http://lifesyncnow-web:8000", "http://lifesyncnow-web"]
+# As of Django 4.0, the values in the CSRF_TRUSTED_ORIGINS setting must start with a scheme (usually http:// or https://)

@@ -7,34 +7,16 @@ docker run -d -p 6379:6379 redis
 
 silk use localhost:8000/silk/ of our project
 
-add /media/ and /static/ to gitignore
-
 install whitenoise: dajngo does't support serving static files in production even though we collect them using cmd  
 collectstatic but to add this feature in production we have to install library whitenoise,using
 whitenoise we can serve our collected statics in production as well.
-
-se logging.so later when app is deployed we can see the log file and troubleshoot issue.
-add logfile in .gitignore i.e general.log
 
 install gunicorm(fast server then testing dev server):
 then to run our app on gunicorm server use 'gunicorm StorefrontBackend2.wsgi'
 
 we can make our app pwa(for mobile non native app of same web)
 
-
 # ---- #
-Procfile(only for heroku) and write initial cmds every time our server start in procfile.
-configure heroku ad-on for our app and choose the db service (i.e CLEARBD on) for provisioning 
-mysql on our heroku cloud.
-'heroku config' -> to see the our env vars on heroku cloud server, copy CLEARBD url before '?'
-and create an env var 'heroku config:set DATABASE_URL(anything)="value of clear db env"'
-
-do the same in other vps but without procfiles
-
-5(only for heroku):
-provision a redis instance (ad-on heroku redis):
-provision our smtp server (ad-on Mailgun):
-
 # -----to install all the dependencies from requirements.txt
 # pip install -r requirements.txt
 # -----git global
@@ -49,11 +31,6 @@ provision our smtp server (ad-on Mailgun):
 # git config --global credential.helper store
 
 # This will set the Git global configuration setting credential.helper to store, which tells Git to use the contents of the ~/.git-credentials file for authentication.
-
-# DB CREDENTIALS
-Enter the username: ourbloguser
-Enter the password: OurBlogPassword
-Enter the database name: ourblogdb
 
 pg_dump -h localhost -p 5432 -U ourbloguser ourblogdb > OurBlogDBDumb.sql
 python3 manage.py dumpdata --exclude auth.permission --exclude contenttypes > data.json
@@ -81,23 +58,8 @@ docker exec -t my-postgres-container pg_dumpall -c -U postgres > dump_`date +%d-
 docker-compose exec db pg_dump -U postgres -Fc postgres > my_backup.dump
 # restore data
 cat dump_data.sql | docker exec -i my-postgres-container psql -U postgres
-# to clear db
+
+# TO CLEAN DB
 python3 manage.py flush --no-input
 
-
-sudo systemctl stop postgresql 
-docker compose up
-
-# to backup the volume
-docker run --rm \
-  -v postgres_data:/volume \
-  -v $(pwd):/backup \
-  busybox \
-  tar czvf /backup/my_backed_up_volume.tar.gz /volume
-
-# to restore the volume
-docker run --rm \
-  -v postgres_data:/volume \
-  -v $(pwd):/backup \
-  busybox \
-  tar xzvf /backup/my_backed_up_volume.tar.gz
+#BACKUP AND RESTORE A WHOLE VOLUME

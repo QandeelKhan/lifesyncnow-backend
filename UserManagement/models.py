@@ -14,7 +14,7 @@ USE_SPACES = config('USE_SPACES', cast=bool, default=False)
 if USE_SPACES:
     fs = default_storage
 else:
-    fs = FileSystemStorage(location='space-our-blog-backend/media')
+    fs = FileSystemStorage(location='space-lifesyncnow/media')
 
 
 def validate_image(image):
@@ -26,7 +26,7 @@ def validate_image(image):
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, first_name, last_name, tc, password=None, password2=None):
+    def create_user(self, email, tc, first_name, last_name, password=None, password2=None):
         """
         Creates and saves a User with the given email, name, tc and password.
         """
@@ -118,12 +118,15 @@ class User(AbstractBaseUser):
         return self.is_admin
 
     def save(self, *args, **kwargs):
-        """
-        Override the save method to set the `most_recent_posts` and `older_posts`
-        fields based on `is_recent` and `is_older` methods respectively.
-        """
-        #
         if not self.user_slug:
-            self.user_slug = slugify(self.first_name)
-
+            base_slug = slugify(self.first_name)
+            self.user_slug = self.generate_unique_slug(base_slug)
         super().save(*args, **kwargs)
+
+    def generate_unique_slug(self, base_slug):
+        slug = base_slug
+        suffix = 1
+        while User.objects.filter(user_slug=slug).exists():
+            slug = f'{base_slug}-{suffix}'
+            suffix += 1
+        return slug

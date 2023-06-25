@@ -10,14 +10,13 @@ from .serializers import UserProfileSerializer
 
 #     def perform_create(self, serializer):
 #         serializer.save(user=self.request.user)
-class UserProfileView(generics.ListAPIView):
+class UserProfileView(generics.RetrieveAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
     lookup_field = 'user_slug'
-    # permission_classes = [permissions.IsAuthenticated]
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    # def perform_create(self, serializer):
+    #     serializer.save(user=self.request.user)
 
 
 class UserProfileRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
