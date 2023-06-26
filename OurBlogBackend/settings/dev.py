@@ -80,7 +80,7 @@ DATABASES = {
         # because of without stopping the port 5432 of default postgres container which is running on 5432 i mapped the docker container port 5432 to 5433
         # in development we can use name as * to connect with any name but in production we have to write the actual hostname of our db
         # 'HOST': "*",
-        'HOST': "db",
+        'HOST': 'db1',
         # 'HOST': "172.23.0.2",
         'PORT': 5432,
     }

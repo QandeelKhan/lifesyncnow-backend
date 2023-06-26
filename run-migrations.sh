@@ -8,7 +8,10 @@ set -e
 #     sleep 1
 # done
 # echo "Postgres is up - running migrations...."
-
+# RUN BACKUP RESTORE
+# docker-compose -f docker-compose.prod.yml exec -T lifesyncnow-db psql -U postgres -d postgres < ./lifesyncnow_db_backup.sql
+# pg_restore -U postgres -d postgres <./lifesyncnow_db_backup.sql
+# echo "Backup restored successfully...!"
 # Run migrations
 python manage.py makemigrations
 python manage.py makemigrations UserManagement

@@ -11,14 +11,9 @@ install whitenoise: dajngo does't support serving static files in production eve
 collectstatic but to add this feature in production we have to install library whitenoise,using
 whitenoise we can serve our collected statics in production as well.
 
-install gunicorm(fast server then testing dev server):
-then to run our app on gunicorm server use 'gunicorm StorefrontBackend2.wsgi'
-
 we can make our app pwa(for mobile non native app of same web)
 
 # ---- #
-# -----to install all the dependencies from requirements.txt
-# pip install -r requirements.txt
 # -----git global
 # echo "https://${GH_USERNAME}:${GH_TOKEN}@github.com" > ~/.git-credentials
 
@@ -31,17 +26,18 @@ we can make our app pwa(for mobile non native app of same web)
 # git config --global credential.helper store
 
 # This will set the Git global configuration setting credential.helper to store, which tells Git to use the contents of the ~/.git-credentials file for authentication.
+# ---- #
+# -----git global
 
-pg_dump -h localhost -p 5432 -U ourbloguser ourblogdb > OurBlogDBDumb.sql
-python3 manage.py dumpdata --exclude auth.permission --exclude contenttypes > data.json
+
+#----SOME USEFUL CMDS----#
 python3 manage.py loaddata data.json
 sudo fuser -k 8000/tcp
-
 python3 manage.py dbbackup
 python3 manage.py dbrestore
+#----SOME USEFUL CMDS----#
 
-
-# way to tag
+# ------WAY TO TAG IMAGE------
 docker tag our-blog-backend:latest qandeelhaider/our-blog-backend:latest
 
 docker inspect my-postgres-container | grep IPAddress
@@ -53,11 +49,19 @@ docker push qandeelhaider/our-blog-backend:latest
 chmod a+x wait-for-it.sh
 docker-compose logs web
 docker volume ls
-# backup data
+# ------WAY TO TAG IMAGE------
+
+# -----BACKUP AND RESTORE POSTGRES DB FOR LIFESYNCNOW-----------
+# ON LOCAL MACHINE:
 docker exec -t my-postgres-container pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
 docker-compose exec db pg_dump -U postgres -Fc postgres > my_backup.dump
 # restore data
 cat dump_data.sql | docker exec -i my-postgres-container psql -U postgres
+# ON LOCAL MACHINE FROM VPS/DROPLET:
+docker-compose -f docker-compose.prod.yml exec -T lifesyncnow-db pg_dump -U postgres -d postgres > ./lifesyncnow_db_backup.sql
+# docker-compose -f docker-compose.prod.yml exec -T lifesyncnow-db pg_restore -U postgres -d postgres < ./lifesyncnow_db_backup.sql
+docker-compose -f docker-compose.prod.yml exec -T lifesyncnow-db psql -U postgres -d postgres < ./lifesyncnow_db_backup.sql
+# -----BACKUP AND RESTORE POSTGRES DB FOR LIFESYNCNOW ----------
 
 # TO CLEAN DB
 python3 manage.py flush --no-input
