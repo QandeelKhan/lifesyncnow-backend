@@ -26,8 +26,8 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 RUN apk update && apk add postgresql-libs mariadb-connector-c bash
 # RUN apk update && apk add --no-cache postgresql-libs mariadb-connector-c bash
-WORKDIR /root/our-blog-backend
+WORKDIR /root/lifesyncnow-backend
 COPY --from=builder /root/.local /root/.local
-COPY --from=builder /app /root/our-blog-backend
+COPY --from=builder /app /root/lifesyncnow-backend
 ENV PATH=/root/.local/bin:$PATH
 EXPOSE 8000

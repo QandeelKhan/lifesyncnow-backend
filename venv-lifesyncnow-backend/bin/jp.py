@@ -1,4 +1,4 @@
-#!/media/qandeel/Drive0/programs/full-stack/our-blog/our-blog-backend/venv-our-blog-backend/bin/python3
+#!/media/qandeel/Drive0/programs/full-stack/our-blog/lifesyncnow-backend/venv-lifesyncnow-backend/bin/python3
 
 import sys
 import json

@@ -1,5 +1,5 @@
 #1: activate virtual environment
-source venv-our-blog-backend/bin/activate
+source venv-lifesyncnow-backend/bin/activate
 #2: run django server
 python3 manage.py runserver
 

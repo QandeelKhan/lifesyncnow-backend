@@ -13,6 +13,8 @@ set -e
 # pg_restore -U postgres -d postgres <./lifesyncnow_db_backup.sql
 # echo "Backup restored successfully...!"
 # Run migrations
+# python manage.py collectstatic --noinput --clear (will siilently remove any existing static files to the aws or django project folder if it already exist, to save from overwritting)
+# python manage.py collectstatic --noinput
 python manage.py makemigrations
 python manage.py makemigrations UserManagement
 python manage.py migrate UserManagement
