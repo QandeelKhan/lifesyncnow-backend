@@ -18,7 +18,7 @@ set -e
 python manage.py makemigrations
 python manage.py makemigrations UserManagement
 python manage.py migrate UserManagement
-python manage.py makemigrations blog UserProfile Subscriber ContactUs
+python manage.py makemigrations blog UserProfile Subscriber ContactUs PageTemplate legal
 python manage.py migrate
 echo "Migrations complete"
 

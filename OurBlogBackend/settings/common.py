@@ -305,7 +305,7 @@ PASSWORD_RESET_TIMEOUT = 900  # 900 Sec = 15min
 # CORS_ORIGIN_WHITELIST = ["https://lifesyncnow.com", "https://www.lifesyncnow.com", "http://0.0.0.0:8000",
 #                          "http://localhost:8000", "http://localhost:3000", "http://0.0.0.0:8000", "*"]
 CORS_ORIGIN_WHITELIST = ["https://lifesyncnow.com", "https://www.lifesyncnow.com", "http://0.0.0.0:8000",
-                         "http://localhost:8000", "http://localhost:3000", "http://0.0.0.0:8000", "https://life-sync-now-bucket.s3.amazonaws.com", "http://lifesyncnow-web:8000", "http://lifesyncnow-web"]
+                         "http://localhost:8000", "http://localhost:3000", "https://life-sync-now-bucket.s3.amazonaws.com", "http://lifesyncnow-web:8000", "http://lifesyncnow-web"]
 CORS_ORIGIN_ALLOW_ALL = True
 
 # for react origin
@@ -318,5 +318,5 @@ CORS_ORIGIN_ALLOW_ALL = True
 # CSRF_TRUSTED_ORIGINS = ["*"]
 CORS_ALLOWED_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
 CSRF_TRUSTED_ORIGINS = ["https://lifesyncnow.com", "https://www.lifesyncnow.com", "http://0.0.0.0:8000",
-                        "http://localhost:8000", "http://localhost:3000", "http://0.0.0.0:8000", "http://lifesyncnow-web:8000", "http://lifesyncnow-web"]
+                        "http://localhost:8000", "http://localhost:3000", "http://localhost:8000", "http://localhost:3000", "http://0.0.0.0:8000", "http://lifesyncnow-web:8000", "http://lifesyncnow-web"]
 # As of Django 4.0, the values in the CSRF_TRUSTED_ORIGINS setting must start with a scheme (usually http:// or https://)
