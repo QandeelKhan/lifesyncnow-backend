@@ -6,7 +6,7 @@ class Command(BaseCommand):
     help = 'Copy data from SQLite to PostgreSQL'
 
     def handle(self, *args, **options):
-        with connections['default'].cursor() as sqlite_cursor, connections['ourblogdb'].cursor() as postgresql_cursor:
+        with connections['default'].cursor() as sqlite_cursor, connections['LifeSyncNowDB'].cursor() as postgresql_cursor:
             # replace `your_postgresql_db_alias` with the alias of the PostgreSQL database in your `settings.py` file
             # get the list of tables in the SQLite database
             sqlite_cursor.execute(

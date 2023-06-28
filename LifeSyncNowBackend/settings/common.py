@@ -122,7 +122,7 @@ INTERNAL_IPS = [
     # ...
 ]
 
-ROOT_URLCONF = 'OurBlogBackend.urls'
+ROOT_URLCONF = 'LifeSyncNowBackend.urls'
 
 TEMPLATES = [
     {
@@ -140,7 +140,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'OurBlogBackend.wsgi.application'
+WSGI_APPLICATION = 'LifeSyncNowBackend.wsgi.application'
 
 # Password validation
 

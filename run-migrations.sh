@@ -23,7 +23,7 @@ python manage.py migrate
 echo "Migrations complete"
 
 # Create a background process for gunicorn server
-gunicorn OurBlogBackend.wsgi:application --bind 0.0.0.0:8000 --workers 4 --threads 4 &
+gunicorn LifeSyncNowBackend.wsgi:application --bind 0.0.0.0:8000 --workers 4 --threads 4 &
 
 # Store the background process ID
 gunicorn_pid=$!

@@ -6,7 +6,8 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'OurBlogBackend.settings.dev')
-# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'OurBlogBackend.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE',
+                      'LifeSyncNowBackend.settings.dev')
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LifeSyncNowBackend.settings')
 
 application = get_wsgi_application()

@@ -8,9 +8,9 @@ sqlite_cursor = sqlite_conn.cursor()
 # Connect to the PostgreSQL database
 pg_conn = psycopg2.connect(
     host='localhost',
-    database='ourblogdb',
-    user='ourbloguser',
-    password='OurBlogPassword'
+    database='LifeSyncNowDB',
+    user='lifesyncnow-user',
+    password='LifeSyncNowPassword'
 )
 pg_cursor = pg_conn.cursor()
 

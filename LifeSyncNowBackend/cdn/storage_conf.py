@@ -20,12 +20,12 @@ if USE_SPACES:
 
     # Static files settings
     # STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/space-lifesyncnow/static/'
-    STATICFILES_STORAGE = 'OurBlogBackend.cdn.backends.StaticStorage'
+    STATICFILES_STORAGE = 'LifeSyncNowBackend.cdn.backends.StaticStorage'
 
     # Media files settings
     PUBLIC_MEDIA_LOCATION = 'space-lifesyncnow/media'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
-    DEFAULT_FILE_STORAGE = 'OurBlogBackend.cdn.backends.MediaStorage'
+    DEFAULT_FILE_STORAGE = 'LifeSyncNowBackend.cdn.backends.MediaStorage'
     #
     # Static files settings
     # STATIC_URL = "https://life-sync-now-bucket.s3.ap-south-1.amazonaws.com/space-lifesyncnow/static/"

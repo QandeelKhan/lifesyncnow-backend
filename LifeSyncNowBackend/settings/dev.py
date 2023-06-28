@@ -53,10 +53,10 @@ DEBUG = True
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'ourblogdb',
+#         'NAME': 'LifeSyncNowDB',
 #         'HOST': 'localhost',
-#         'USER': 'ourbloguser',
-#         'PASSWORD': 'OurBlogPassword'
+#         'USER': 'lifesyncnow-user',
+#         'PASSWORD': 'LifeSyncNowPassword'
 #     }
 # }
 # with docker
