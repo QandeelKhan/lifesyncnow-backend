@@ -13,35 +13,30 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-INSTALLED_APPS = [
+# --------APPS STRUCTURE----------#
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
-    'django_filters',
-    'corsheaders',
-    'rest_framework',
-    'djoser',
-    'silk',
-    'debug_toolbar',
-    'rest_framework_swagger',
-    'dbbackup',
-    'ContactUs',
+
+]
+PROJECT_APPS = [
+    'UserManagement',
     'UserProfile',
+    'blog',
     'PageTemplate',
+    'ContactUs',
     'Subscriber',
+    'legal',
     # 'playground',
     # 'store',
     # 'core',
     # 'tags',
     # 'likes',
     # --USER MANAGEMENT,
-    'rest_framework_simplejwt',
-    'UserManagement',
-    'blog',
-    'legal',
     # 'allauth',
     # 'allauth.account',
     # 'allauth.socialaccount',
@@ -53,6 +48,21 @@ INSTALLED_APPS = [
     # 'rest_framework.authtoken',
 ]
 
+THIRD_PARTY_APPS = [
+    'django_filters',
+    'corsheaders',
+    'rest_framework',
+    'djoser',
+    'silk',
+    'debug_toolbar',
+    'rest_framework_swagger',
+    'dbbackup',
+    'rest_framework_simplejwt',
+
+]
+
+INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
+# --------APPS STRUCTURE----------#
 
 # Backup settings
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
@@ -296,7 +306,7 @@ X_FRAME_OPTIONS = 'DENY'
 # CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 ALLOWED_HOSTS = ["https://lifesyncnow.com", "https://www.lifesyncnow.com", "http://0.0.0.0:8000",
-                 "http://localhost:8000", "http://localhost:3000", "http://0.0.0.0:8000", "https://life-sync-now-bucket.s3.amazonaws.com", "http://lifesyncnow-web:8000", "http://lifesyncnow-web", "lifesyncnow-web"]
+                 "http://localhost:8000", "http://localhost:3000", "http://0.0.0.0:8000", "https://life-sync-now-bucket.s3.amazonaws.com", "http://lifesyncnow-backend:8000", "http://lifesyncnow-backend", "lifesyncnow-backend"]
 PASSWORD_RESET_TIMEOUT = 900  # 900 Sec = 15min
 # For development purposes.
 
@@ -305,7 +315,7 @@ PASSWORD_RESET_TIMEOUT = 900  # 900 Sec = 15min
 # CORS_ORIGIN_WHITELIST = ["https://lifesyncnow.com", "https://www.lifesyncnow.com", "http://0.0.0.0:8000",
 #                          "http://localhost:8000", "http://localhost:3000", "http://0.0.0.0:8000", "*"]
 CORS_ORIGIN_WHITELIST = ["https://lifesyncnow.com", "https://www.lifesyncnow.com", "http://0.0.0.0:8000",
-                         "http://localhost:8000", "http://localhost:3000", "https://life-sync-now-bucket.s3.amazonaws.com", "http://lifesyncnow-web:8000", "http://lifesyncnow-web"]
+                         "http://localhost:8000", "http://localhost:3000", "https://life-sync-now-bucket.s3.amazonaws.com", "http://lifesyncnow-backend:8000", "http://lifesyncnow-backend"]
 CORS_ORIGIN_ALLOW_ALL = True
 
 # for react origin
@@ -318,5 +328,5 @@ CORS_ORIGIN_ALLOW_ALL = True
 # CSRF_TRUSTED_ORIGINS = ["*"]
 CORS_ALLOWED_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
 CSRF_TRUSTED_ORIGINS = ["https://lifesyncnow.com", "https://www.lifesyncnow.com", "http://0.0.0.0:8000",
-                        "http://localhost:8000", "http://localhost:3000", "http://localhost:8000", "http://localhost:3000", "http://0.0.0.0:8000", "http://lifesyncnow-web:8000", "http://lifesyncnow-web"]
+                        "http://localhost:8000", "http://localhost:3000", "http://localhost:8000", "http://localhost:3000", "http://0.0.0.0:8000", "http://lifesyncnow-backend:8000", "http://lifesyncnow-backend"]
 # As of Django 4.0, the values in the CSRF_TRUSTED_ORIGINS setting must start with a scheme (usually http:// or https://)

@@ -23,8 +23,8 @@ python manage.py migrate
 echo "Migrations complete"
 
 # Create a background process for gunicorn server
-gunicorn LifeSyncNowBackend.wsgi:application --bind 0.0.0.0:8000 --workers 4 --threads 4 &
-
+gunicorn LifeSyncNowBackend.wsgi:application --env DJANGO_SETTINGS_MODULE=LifeSyncNowBackend.settings.dev --bind 0.0.0.0:8000 --workers 2 --threads 2 &
+# --workers 1 --threads 2 & (for single(core) cpu and 2gb ram)
 # Store the background process ID
 gunicorn_pid=$!
 

@@ -51,7 +51,7 @@ docker-compose logs web
 docker volume ls
 # ------WAY TO TAG IMAGE------
 
-# -----BACKUP AND RESTORE POSTGRES DB FOR LIFESYNCNOW-----------
+# -----------BACKUP AND RESTORE POSTGRES DB FOR LIFESYNCNOW-----------#
 # ON LOCAL MACHINE:
 docker exec -t my-postgres-container pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
 docker-compose exec db pg_dump -U postgres -Fc postgres > my_backup.dump
@@ -61,9 +61,14 @@ cat dump_data.sql | docker exec -i my-postgres-container psql -U postgres
 docker-compose -f docker-compose.prod.yml exec -T lifesyncnow-db pg_dump -U postgres -d postgres > ./lifesyncnow_db_backup.sql
 # docker-compose -f docker-compose.prod.yml exec -T lifesyncnow-db pg_restore -U postgres -d postgres < ./lifesyncnow_db_backup.sql
 docker-compose -f docker-compose.prod.yml exec -T lifesyncnow-db psql -U postgres -d postgres < ./lifesyncnow_db_backup.sql
-# -----BACKUP AND RESTORE POSTGRES DB FOR LIFESYNCNOW ----------
+# -----------BACKUP AND RESTORE POSTGRES DB FOR LIFESYNCNOW-----------#
 
 # TO CLEAN DB
 python3 manage.py flush --no-input
 
 #BACKUP AND RESTORE A WHOLE VOLUME
+
+# EXAMPLE OF A GOOD PROJECT STRUCTURE
+https://github.com/DanielArturoAlejoAlvarez/BLOG-ADVANCED-REST-API-WITH-DJANGO-4.1.5-AND-REACT-REDUX/blob/main/core/settings.py
+# EXAMPLE OF A GOOD GITHUB PROFILE
+https://github.com/RalitsaTerzieva
