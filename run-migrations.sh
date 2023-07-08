@@ -16,14 +16,14 @@ set -e
 # python manage.py collectstatic --noinput --clear (will siilently remove any existing static files to the aws or django project folder if it already exist, to save from overwritting)
 # python manage.py collectstatic --noinput
 python manage.py makemigrations
-python manage.py makemigrations UserManagement
-python manage.py migrate UserManagement
-python manage.py makemigrations blog UserProfile Subscriber ContactUs PageTemplate legal
+python manage.py makemigrations user_management
+python manage.py migrate user_management
+python manage.py makemigrations blog user_profile subscriber page global_content legal
 python manage.py migrate
 echo "Migrations complete"
 
 # Create a background process for gunicorn server
-gunicorn LifeSyncNowBackend.wsgi:application --env DJANGO_SETTINGS_MODULE=LifeSyncNowBackend.settings.dev --bind 0.0.0.0:8000 --workers 2 --threads 2 &
+gunicorn lifesyncnow_backend.wsgi:application --env DJANGO_SETTINGS_MODULE=lifesyncnow_backend.settings.dev --bind 0.0.0.0:8000 --workers 2 --threads 2 &
 # --workers 1 --threads 2 & (for single(core) cpu and 2gb ram)
 # Store the background process ID
 gunicorn_pid=$!

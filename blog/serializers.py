@@ -164,35 +164,36 @@ class BlogPostSerializer(serializers.ModelSerializer):
         model = BlogPost
         fields = [
             'id',
-            # 'topic_featured_posts',
-            'post_images',
-            'comments',
-            'comment_count',
-            'title',
+            'author',
+            'author_first_name',
+            'author_last_name',
+            'author_earnings',
             'content',
+            'comments',
             'cover_image',
+            'comment_count',
+            'created_at',
+            'category',
+            'category_name',
+            'full_name',
+            'featured_posts',
+            'most_recent_posts',
+            'older_posts',
+            'post_images',
             'paragraphs',
             'quote',
             'quote_writer',
-            # 'paragraph_after_image',
-            'author',
-            # 'author_profile',
-            'author_first_name',
-            'author_last_name',
-            'created_at',
-            'updated_at',
-            'category',
-            'category_name',
-            'most_recent_posts',
-            'older_posts',
-            'featured_posts',
-            # 'step_by_step_guide',
-            # 'sps_guide',
             'slug',
-            'full_name',
+            'title',
             'topic',
             'topics_name',
             'topic_slug',
+            'updated_at',
+            # 'topic_featured_posts',
+            # 'sps_guide',
+            # 'paragraph_after_image',
+            # 'author_profile',
+            # 'step_by_step_guide',
         ]
         depth = 1
 
@@ -215,3 +216,9 @@ class BlogPostSerializer(serializers.ModelSerializer):
     def get_topic_slug(self, obj):
         topics = obj.topic.category.topics.all()
         return [topic.topic_slug for topic in topics]
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        if request:
+            validated_data['author'] = request.user
+        return super().create(validated_data)

@@ -51,3 +51,4 @@ social-auth-app-django
 social-auth-core
 virtualenv
 whitenoise
+django-ckeditor

@@ -10,7 +10,7 @@ from django.core.files.storage import default_storage
 from decouple import config
 from django.utils import timezone
 from .paragraph_with_sbs import BlogParagraph
-from UserProfile.models import UserProfile
+from user_profile.models import UserProfile
 from django.template.defaultfilters import slugify
 # make custom storage backend for image
 USE_SPACES = config('USE_SPACES', cast=bool, default=False)
@@ -134,6 +134,9 @@ class BlogPost(models.Model):
         BlogPostImage, related_name='post_images', blank=True)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_posts', help_text="The author of the blog post.")
+    # newly added
+    author_earnings = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0.00)
     author_profile = models.ForeignKey(
         UserProfile, on_delete=models.CASCADE, related_name='blog_posts', help_text="The author of the blog post.", null=True, blank=True)
     created_at = models.DateTimeField(
@@ -190,6 +193,13 @@ class BlogPost(models.Model):
             self.slug = slugify(self.title)
 
         super().save(*args, **kwargs)
+
+
+class View(models.Model):
+    blog_post = models.ForeignKey(BlogPost, on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    ip_address = models.GenericIPAddressField()
 
 
 class Comment(models.Model):
