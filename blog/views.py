@@ -83,25 +83,6 @@ class BlogPostDeleteView(generics.DestroyAPIView):
     serializer_class = BlogPostSerializer
 
 
-# class CommentCreateView(generics.CreateAPIView):
-#     permission_classes = [IsAuthenticated]
-#     serializer_class = CommentSerializer
-
-#     def perform_create(self, serializer):
-#         blog_post_id = self.kwargs['blog_post_id']
-#         blog_post = BlogPost.objects.get(id=blog_post_id)
-#         serializer.save(author=self.request.user, post=blog_post)
-
-
-# class ReplyCreateView(generics.CreateAPIView):
-#     permission_classes = [IsAuthenticated]
-#     serializer_class = ReplySerializer
-
-#     def perform_create(self, serializer):
-#         comment_id = self.kwargs['comment_id']
-#         comment = Comment.objects.get(id=comment_id)
-#         serializer.save(author=self.request.user, comment_id=comment)
-
 class CommentCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = CommentSerializer

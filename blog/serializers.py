@@ -1,42 +1,21 @@
 
 from rest_framework import serializers
-from .models import BlogPost, BlogPostImage, Comment, Reply, BlogParagraph, Topic, TopicFeaturedPost, Category
-from .paragraph_with_sbs import BlogStepByStepGuide
-# from UserProfile.serializers import UserProfileSerializer
-
-# class SubFieldsSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = SubFields
-#         fields = '__all__'
+from .models import BlogPost, Comment, Reply, Topic, TopicFeaturedPost, Category
+from django.conf import settings
+import re
 
 
-# class SBSGuideSubSectionSerializer(serializers.ModelSerializer):
-#     sub_headings_and_contents = SubFieldsSerializer(many=True)
+# class BlogPostImageSerializer(serializers.ModelSerializer):
+#     images = serializers.SerializerMethodField()
 
 #     class Meta:
-#         model = SBSGuideSubSection
+#         model = BlogPostImage
 #         fields = '__all__'
 
-
-class SBSGuideSerializer(serializers.ModelSerializer):
-    # sbs_guides_subsections = SBSGuideSubSectionSerializer(many=True)
-
-    class Meta:
-        model = BlogStepByStepGuide
-        fields = '__all__'
-
-
-class BlogPostImageSerializer(serializers.ModelSerializer):
-    images = serializers.SerializerMethodField()
-
-    class Meta:
-        model = BlogPostImage
-        fields = '__all__'
-
-    def get_images(self, obj):
-        if obj.images:
-            return self.context['request'].build_absolute_uri(obj.images.url)
-        return None
+#     def get_images(self, obj):
+#         if obj.images:
+#             return self.context['request'].build_absolute_uri(obj.images.url)
+#         return None
 
 
 class ReplySerializer(serializers.ModelSerializer):
@@ -44,7 +23,6 @@ class ReplySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reply
-        # fields = '__all__'
         fields = ['id', 'created_at', 'updated_at', 'reply_text', 'comment_id',
                   'author', 'author_full_name']
         depth = 1
@@ -111,20 +89,13 @@ class CategorySerializer(serializers.ModelSerializer):
         topics = obj.topics.all()
         return [topic.topic_slug for topic in topics]
 
-    # Add the `topics_name` field directly to the serializer's fields
-    # to get it out of nesting.
-    # def to_representation(self, instance):
-    #     rep = super().to_representation(instance)
-    #     rep['topics_name'] = self.get_topics_name(instance)
-    #     return rep
-
 
 class TopicSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
 
     class Meta:
         model = Topic
-        # fields = ['topic', 'topic_featured']
+
         fields = ['topic_name', 'topic_slug', 'category']
 
     def get_topics_name(self, obj):
@@ -132,31 +103,42 @@ class TopicSerializer(serializers.ModelSerializer):
         return [category.category_name for category in categories]
 
 
-class BlogParagraphSerializer(serializers.ModelSerializer):
-    step_by_step_guide = SBSGuideSerializer(many=True)
+class FixImageUrlSerializerField(serializers.CharField):
+    def to_representation(self, value):
+        if value:
+            # Regular expression to match image URLs
+            pattern = r'<img([^>]*)src=["\']([^"\']+)["\']([^>]*)>'
 
-    class Meta:
-        model = BlogParagraph
-        fields = ('id', 'paragraph_title',
-                  'paragraph_content', 'step_by_step_guide')
+            # Find all image URLs in the content field
+            matches = re.finditer(pattern, value)
+
+            # Fix the image URLs by adding the server URL and new class
+            for match in matches:
+                attrs = match.group(1)
+                url = match.group(2)
+                end_attrs = match.group(3)
+
+                # Check if 'class' attribute is present
+                if 'class' not in attrs:
+                    attrs += ' class="ck-blog-content-img"'
+
+                fixed_url = f'{settings.SERVER_URL}{url}'
+                fixed_tag = f'<img{attrs} src="{fixed_url}"{end_attrs}>'
+
+                value = value.replace(match.group(0), fixed_tag)
+
+        return value
 
 
 class BlogPostSerializer(serializers.ModelSerializer):
-    # topic_featured_posts = TopicFeaturedPostSerializer(
-    #     many=True, read_only=True)
     topic = TopicSerializer(read_only=True)
     topics_name = serializers.SerializerMethodField()
     topic_slug = serializers.SerializerMethodField()
-    paragraphs = BlogParagraphSerializer(
-        source='blog_paragraphs.all', many=True)
-    post_images = BlogPostImageSerializer(many=True)
-    # step_by_step_guide = SBSGuideSerializer(many=True)
     comments = CommentSerializer(many=True, read_only=True)
     comment_count = serializers.SerializerMethodField()
     author_first_name = serializers.SerializerMethodField()
     author_last_name = serializers.SerializerMethodField()
-    # author_profile = UserProfileSerializer()
-    # author_profile = UserProfileSerializer(source='author.userprofile')
+    content = FixImageUrlSerializerField()
     full_name = serializers.SerializerMethodField()
     category_name = serializers.ReadOnlyField(source='category.category_name')
 
@@ -180,20 +162,12 @@ class BlogPostSerializer(serializers.ModelSerializer):
             'most_recent_posts',
             'older_posts',
             'post_images',
-            'paragraphs',
-            'quote',
-            'quote_writer',
             'slug',
             'title',
             'topic',
             'topics_name',
             'topic_slug',
             'updated_at',
-            # 'topic_featured_posts',
-            # 'sps_guide',
-            # 'paragraph_after_image',
-            # 'author_profile',
-            # 'step_by_step_guide',
         ]
         depth = 1
 

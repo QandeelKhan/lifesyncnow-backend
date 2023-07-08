@@ -52,3 +52,4 @@ social-auth-core
 virtualenv
 whitenoise
 django-ckeditor
+django-admin-thumbnails

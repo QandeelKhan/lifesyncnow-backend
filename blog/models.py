@@ -9,7 +9,6 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.core.files.storage import default_storage
 from decouple import config
 from django.utils import timezone
-from .paragraph_with_sbs import BlogParagraph
 from user_profile.models import UserProfile
 from django.template.defaultfilters import slugify
 # make custom storage backend for image
@@ -26,17 +25,6 @@ def validate_image(image):
         img.verify()
     except (IOError, SyntaxError) as e:
         raise ValidationError("Invalid image: %s" % e)
-
-# for more then one images and image_links we created BlogPostImage model
-
-
-class BlogPostImage(models.Model):
-    images = models.ImageField(upload_to='blog-images/',
-                               storage=fs, validators=[validate_image], blank=True, null=True)
-    # image_links = models.TextField(max_length=500, blank=True, null=True)
-
-    def __str__(self):
-        return str(self.images)
 
 
 class Category(models.Model):
@@ -126,12 +114,6 @@ class BlogPost(models.Model):
     )
     cover_image = models.ImageField(upload_to='blog-images/',
                                     storage=fs, validators=[validate_image], null=True, blank=True)
-    paragraphs = models.ManyToManyField(
-        BlogParagraph, related_name='paragraphs')
-    quote = models.CharField(max_length=255, null=True, blank=True)
-    quote_writer = models.CharField(max_length=255, null=True, blank=True)
-    post_images = models.ManyToManyField(
-        BlogPostImage, related_name='post_images', blank=True)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_posts', help_text="The author of the blog post.")
     # newly added
