@@ -1,0 +1,3 @@
+worker: celery -A lifesyncnow_backend.celery_app worker --concurrency=1 --prefetch-multiplier=1 -n lifesyncnow-celery-worker@%h
+gunicorn-web: sh -c "gunicorn -c config/gunicorn.conf.py lifesyncnow_backend.wsgi:application --env DJANGO_SETTINGS_MODULE=lifesyncnow_backend.settings.dev && chmod 777 run/gunicorn.sock"
+daphne-websocket: sh -c "daphne -u run/daphne.sock lifesyncnow_backend.asgi:application && chmod 777 run/daphne.sock"

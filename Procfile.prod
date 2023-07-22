@@ -1,0 +1,1 @@
+gunicorn-web: gunicorn lifesyncnow_backend.wsgi:application --bind unix:/run/gunicorn.sock --env DJANGO_SETTINGS_MODULE=lifesyncnow_backend.settings.dev

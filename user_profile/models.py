@@ -24,14 +24,19 @@ def validate_image(image):
         raise ValidationError("Invalid image: %s" % e)
 
 
+User = get_user_model()
+
+
 class Role(models.Model):
     role_name = models.CharField(max_length=100)
 
     def __str__(self):
         return str(self.role_name)
 
-
-User = get_user_model()
+    class Meta:
+        verbose_name = "role"
+        verbose_name_plural = "users role"
+        db_table = "role"
 
 
 class UserProfile(models.Model):

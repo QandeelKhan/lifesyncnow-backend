@@ -72,3 +72,23 @@ python3 manage.py flush --no-input
 https://github.com/DanielArturoAlejoAlvarez/BLOG-ADVANCED-REST-API-WITH-DJANGO-4.1.5-AND-REACT-REDUX/blob/main/core/settings.py
 # EXAMPLE OF A GOOD GITHUB PROFILE
 https://github.com/RalitsaTerzieva
+
+# defender cleanup command in case we a large scale of traffic on our blog and blocked ip list is so much in db
+python manage.py cleanup_django_defender
+You can set this up as a daily or weekly cron job to keep the table size down.
+
+# run at 12:24 AM every morning.
+24 0 * * * /usr/bin/python manage.py cleanup_django_defender >> /var/log/django_defender_cleanup.log
+
+#-------PROCFILE
+# must add ssl/tls for the flower as well in production
+i consider lowering the prefetch count to limit the number of unacknowledged tasks being processed simultaneously.
+CMD: "celery -A lifesyncnow_backend.celery_app worker --concurrency=1 --prefetch-multiplier=1"
+By setting the concurrency to 1, you ensure that only one task is executed at a time. The --prefetch-multiplier=1 option limits the prefetch count to 1, reducing the number of unacknowledged tasks in the worker's queue.
+
+# -----TREE
+tree -I 'venv-lifesyncnow-backend|space-lifesyncnow|playground|meta|locustfiles|legal|global_content|DjangoBackup|subscriber|store|like|tag|user_profile|page|paragraph_with_sbs|templates|about'
+flower: sleep 5 && celery -A lifesyncnow_backend.celery_app flower --basic_auth=com.qandeelhaider@gmail.com:com.1995
+worker: celery -A lifesyncnow_backend.celery_app worker --concurrency=1 --prefetch-multiplier=1 -n lifesyncnow-celery-worker@%h
+# websocket connectoin testing tool using npm package wscat
+wscat -c ws://websocket-echo.com

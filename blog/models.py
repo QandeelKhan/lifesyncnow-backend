@@ -44,6 +44,12 @@ class Category(models.Model):
         if not self.category_slug:
             self.category_slug = slugify(self.category_name)
         super().save(*args, **kwargs)
+    # Metadata
+
+    class Meta:
+        ordering = ("category_name",)
+        verbose_name_plural = "categories"
+        db_table = "category"
 
 
 class Topic(models.Model):
@@ -214,3 +220,9 @@ class Reply(models.Model):
 
     def __str__(self):
         return f'{self.author.first_name} {self.author.last_name}: {self.reply_text}'
+    # Metadata
+
+    class Meta:
+        ordering = ("reply_text",)
+        verbose_name_plural = "replies"
+        db_table = "reply"

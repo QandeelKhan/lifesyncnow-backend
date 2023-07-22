@@ -1,0 +1,85 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Account Blocked</title>
+    <style>
+        /* Add your own CSS styles here */
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-top: 0;
+        }
+
+        p {
+            color: #777;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Account Blocked</h1>
+        <p>Your account has been blocked for security reasons.</p>
+        <p>Please wait for {{ cooloff_time_minutes }} minutes before attempting to log in again.</p>
+        <p>Failure limit: {{ failure_limit }}</p>
+    </div>
+</body>
+
+</html> -->
+
+<!--  -->
+
+{% load static %} <!-- Load the static template tag -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Access Denied</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+
+<body style="background-color: black;">
+    <div class="w3-display-middle">
+        <h1 class="w3-jumbo w3-animate-top w3-center" style="color: red;"><code>Account Blocked</code></h1>
+        <hr class="w3-border-white w3-animate-left" style="margin:auto;width:50%">
+        <h3 class="w3-center w3-animate-right" style="color: red;">Your account has been blocked for security reasons.
+        </h3>
+        <h3 class="w3-center w3-animate-right" style="color: red;">Please wait for {{ cooloff_time_minutes }} minutes
+            before attempting to log in again.
+        </h3>
+        <h3 class="w3-center w3-animate-right" style="color: red;">Failure limit: {{ failure_limit }}</h3>
+        <h3 class="w3-center w3-animate-zoom">🚫🚫🚫🚫</h3>
+        <h6 class="w3-center w3-animate-zoom" style="color: red; text-decoration: underline;">error code:403 forbidden
+        </h6>
+        <p></p>
+
+    </div>
+</body>
+
+</html>
+
+
+</html>

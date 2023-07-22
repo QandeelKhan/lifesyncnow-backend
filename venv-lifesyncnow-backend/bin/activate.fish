@@ -30,7 +30,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/media/qandeel/Drive0/programs/full-stack/our-blog/lifesyncnow-backend/venv-lifesyncnow-backend"
+set -gx VIRTUAL_ENV "/media/qandeel/Drive0/programs/full-stack/LifeSyncNow/lifesyncnow-backend/venv-lifesyncnow-backend"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

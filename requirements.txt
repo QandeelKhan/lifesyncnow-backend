@@ -53,3 +53,9 @@ virtualenv
 whitenoise
 django-ckeditor
 django-admin-thumbnails
+django-defender
+django-recaptcha
+channels
+honcho
+daphne
+channels-redis

@@ -1,5 +1,14 @@
 #!/bin/bash
 set -e
+python manage.py makemigrations
+python manage.py makemigrations user_management
+python manage.py migrate user_management
+python manage.py makemigrations blog user_profile subscriber page global_content legal
+python manage.py migrate
+echo "Migrations complete"
+# celery -A lifesyncnow_backend.celery_app worker --concurrency=1 --prefetch-multiplier=1 -n lifesyncnow-celery-worker@%h
+# daphne -u var/run/daphne.sock lifesyncnow_backend.asgi:application
+# gunicorn -c config/gunicorn.conf.py lifesyncnow_backend.wsgi:application --env DJANGO_SETTINGS_MODULE=lifesyncnow_backend.settings.dev
 
 # Uncomment the following lines if you want to wait for the database to start
 # echo "Waiting for database to start..."
@@ -15,21 +24,18 @@ set -e
 # Run migrations
 # python manage.py collectstatic --noinput --clear (will siilently remove any existing static files to the aws or django project folder if it already exist, to save from overwritting)
 # python manage.py collectstatic --noinput
-python manage.py makemigrations
-python manage.py makemigrations user_management
-python manage.py migrate user_management
-python manage.py makemigrations blog user_profile subscriber page global_content legal
-python manage.py migrate
-echo "Migrations complete"
 
 # Create a background process for gunicorn server
-gunicorn lifesyncnow_backend.wsgi:application --env DJANGO_SETTINGS_MODULE=lifesyncnow_backend.settings.dev --bind 0.0.0.0:8000 --workers 2 --threads 2 &
+# honcho start
+# celery -A lifesyncnow_backend.celery_app worker --concurrency=1 --prefetch-multiplier=1 -n lifesyncnow-celery-worker@%h
+# gunicorn -c gunicorn.conf.py lifesyncnow_backend.wsgi:application --env DJANGO_SETTINGS_MODULE=lifesyncnow_backend.settings.dev
+
+# gunicorn lifesyncnow_backend.wsgi:application --env DJANGO_SETTINGS_MODULE=lifesyncnow_backend.settings.dev --bind 0.0.0.0:8000 --workers 2 --threads 2 &
 # --workers 1 --threads 2 & (for single(core) cpu and 2gb ram)
 # Store the background process ID
-gunicorn_pid=$!
+# gunicorn_pid=$!
 
 # Uncomment the following line if you want to run the Django server using 'python manage.py runserver'
 # python manage.py runserver
 
 # Wait for the gunicorn server to complete before exiting the script
-wait $gunicorn_pid

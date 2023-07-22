@@ -1,9 +1,4 @@
 
-from rest_framework import serializers
-from .models import BlogPost, Comment, Reply, Topic, TopicFeaturedPost, Category
-from django.conf import settings
-import re
-
 
 # class BlogPostImageSerializer(serializers.ModelSerializer):
 #     images = serializers.SerializerMethodField()
@@ -16,6 +11,11 @@ import re
 #         if obj.images:
 #             return self.context['request'].build_absolute_uri(obj.images.url)
 #         return None
+
+from rest_framework import serializers
+from .models import BlogPost, Comment, Reply, Topic, TopicFeaturedPost, Category
+from django.conf import settings
+import re
 
 
 class ReplySerializer(serializers.ModelSerializer):
@@ -161,7 +161,6 @@ class BlogPostSerializer(serializers.ModelSerializer):
             'featured_posts',
             'most_recent_posts',
             'older_posts',
-            'post_images',
             'slug',
             'title',
             'topic',
@@ -184,12 +183,22 @@ class BlogPostSerializer(serializers.ModelSerializer):
         return f"{obj.author.first_name} {obj.author.last_name}"
 
     def get_topics_name(self, obj):
-        topics = obj.topic.category.topics.all()
-        return [topic.topic_name for topic in topics]
+        category = obj.category
+        if category:
+            topics = category.topics.all()
+            return [topic.topic_name for topic in topics]
+        return []
 
     def get_topic_slug(self, obj):
-        topics = obj.topic.category.topics.all()
-        return [topic.topic_slug for topic in topics]
+        category = obj.category
+        if category:
+            topics = category.topics.all()
+            return [topic.topic_slug for topic in topics]
+        return []
+
+    # def get_topic_slug(self, obj):
+    #     topics = obj.topic.category.topics.all()
+    #     return [topic.topic_slug for topic in topics]
 
     def create(self, validated_data):
         request = self.context.get('request')

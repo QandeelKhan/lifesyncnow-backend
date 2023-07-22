@@ -11,10 +11,6 @@ class StepByStepGuideSerializer(serializers.ModelSerializer):
         model = StepByStepGuide
         fields = '__all__'
 
-
-class ParagraphSerializer(serializers.ModelSerializer):
-    step_by_step_guide = StepByStepGuideSerializer(many=True)
-
     class Meta:
         model = Paragraph
         fields = ('id', 'paragraph_title',
@@ -22,17 +18,14 @@ class ParagraphSerializer(serializers.ModelSerializer):
 
 
 class ContactUsSerializer(serializers.ModelSerializer):
-    paragraphs = ParagraphSerializer(
-        source='contact_paragraphs.all', many=True)
 
     class Meta:
         model = ContactUs
         fields = ('id', 'title', 'content', 'author',
-                  'created_at', 'updated_at', 'paragraphs',)
+                  'created_at', 'updated_at',)
 
 
 class AdvertiseWithWellPlusGoodSerializer(serializers.ModelSerializer):
-    paragraphs_advertise_well_good = ParagraphSerializer(many=True)
 
     class Meta:
         model = AdvertiseWithWellPlusGood

@@ -1,0 +1,19 @@
+FROM python:3.9-alpine
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Install Celery
+RUN pip install --no-cache-dir celery
+
+# Copy the necessary files for the Celery worker
+COPY lifesyncnow_backend/celery_app.py ./lifesyncnow_backend/celery_app.py
+COPY lifesyncnow_backend/__init__.py ./lifesyncnow_backend/__init__.py
+
+# Set environment variables (if necessary)
+ENV REDIS_HOST=redis
+ENV REDIS_PORT=6379
+ENV REDIS_DB=default
+
+# Run the Celery worker
+CMD celery -A lifesyncnow_backend.celery_app worker --loglevel=info

@@ -1,8 +1,6 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-from .paragraph_with_sbs import Paragraph
-from ckeditor.fields import RichTextField
 from meta.models import SEO
 
 
@@ -38,8 +36,6 @@ class AdvertiseWithWellPlusGood(models.Model):
         max_length=100, help_text="The title of the about page.")
     content = models.TextField(
         null=True, blank=True, help_text="The content of the about page.")
-    paragraphs_advertise_well_good = models.ManyToManyField(
-        'Paragraph', related_name='paragraphs_advertise_well_good', blank=True)
     author_advertise_well_good = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='advertise_well_good', help_text="The author of the contact us page.")
     created_at = models.DateTimeField(
@@ -61,8 +57,6 @@ class ContactUs(models.Model):
         max_length=100, help_text="The title of the about page.")
     content = models.TextField(
         null=True, blank=True, help_text="The content of the about page.")
-    paragraphs = models.ManyToManyField(
-        'Paragraph', related_name='paragraphs_contact_us', blank=True)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author_contact_us', help_text="The author of the contact us page.")
     created_at = models.DateTimeField(

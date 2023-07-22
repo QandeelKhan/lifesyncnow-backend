@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import BlogPostListView, BlogPostDetailView, BlogPostCreateView, BlogPostUpdateView, BlogPostDeleteView, CommentCreateView, ReplyCreateView, BlogPostByCategoryView, TopicListView, BlogPostListByCategoryAndTopicAPIView
+from .views import BlogPostListView, BlogPostDetailView, BlogPostCreateView, BlogPostUpdateView, BlogPostDeleteView, CommentCreateView, ReplyCreateView, BlogPostByCategoryView, TopicListView, BlogPostListByCategoryAndTopicAPIView, enqueue_load_posts
 
 urlpatterns = [
     path('blog/posts-list', BlogPostListView.as_view(), name='blog-list'),
+    path('blog/enqueue_load_posts', enqueue_load_posts, name='enqueue-list'),
     path('blog/category/<str:category_slug>/',
          BlogPostByCategoryView.as_view(), name='blog_post_by_category'),
     path('blog/category/<str:category_slug>/<str:topic_slug>/',

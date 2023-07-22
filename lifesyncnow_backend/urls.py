@@ -4,8 +4,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from ckeditor_uploader.views import ImageUploadView
 
+# This should stay the same
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('admin/defender/', include('defender.urls')),
     path('api/', include('user_management.urls')),
     path('api/', include('blog.urls')),
     path('api/', include('legal.urls')),
@@ -14,6 +16,8 @@ urlpatterns = [
     path('api/', include('global_content.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('uploads/', ImageUploadView.as_view(), name="uploads"),
+    # Other URL patterns
+    # path('api/', include(routing.ProgressWebSocket)),
     # path('auth/', include('djoser.urls')),
     # path('auth/', include('djoser.urls.authtoken')),
     # django all auth

@@ -3,7 +3,7 @@ from datetime import timedelta
 import os
 from pathlib import Path
 from pprint import pprint
-from celery.schedules import crontab
+# from celery.schedules import crontab
 from django.conf import settings
 from dotenv import load_dotenv
 load_dotenv()
@@ -21,6 +21,7 @@ DJANGO_APPS = [
     'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
+    'channels',
 
 ]
 PROJECT_APPS = [
@@ -32,6 +33,7 @@ PROJECT_APPS = [
     'subscriber',
     'user_management',
     'user_profile',
+    'lifesyncnow_backend',
     # 'playground',
     # 'store',
     # 'core',
@@ -61,11 +63,28 @@ THIRD_PARTY_APPS = [
     'rest_framework_simplejwt',
     'ckeditor',
     'ckeditor_uploader',
+    'defender',
 ]
 
-SERVER_URL = 'http://localhost:8000'
+# SERVER_URL = 'http://127.0.0.1:8000'
+SERVER_URL = '127.0.0.1'
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 # --------APPS STRUCTURE----------#
+
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels.layers.InMemoryChannelLayer',
+#     },
+# }
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}
+
 
 # Backup settings
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
@@ -122,6 +141,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'defender.middleware.FailedLoginMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -140,7 +160,7 @@ ROOT_URLCONF = 'lifesyncnow_backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -154,6 +174,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'lifesyncnow_backend.wsgi.application'
+ASGI_APPLICATION = 'lifesyncnow_backend.asgi.application'
 
 # Password validation
 
@@ -227,13 +248,13 @@ ADMINS = [
     ('Haider', 'admin@haiderbuy.com')
 ]
 
-CELERY_BEAT_SCHEDULE = {
-    'notify_customers': {
-        'task': 'playground.tasks.notify_customers',
-        'schedule': 5,
-        'args': ['Hi World'],
-    }
-}
+# CELERY_BEAT_SCHEDULE = {
+#     'notify_customers': {
+#         'task': 'playground.tasks.notify_customers',
+#         'schedule': 5,
+#         'args': ['Hi World'],
+#     }
+# }
 
 LOGGING = {
     'version': 1,
@@ -309,7 +330,7 @@ X_FRAME_OPTIONS = 'DENY'
 # CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 ALLOWED_HOSTS = ["https://lifesyncnow.com", "https://www.lifesyncnow.com", "http://0.0.0.0:8000",
-                 "http://localhost:8000", "localhost:8000", 'localhost', "http://localhost:3000", "http://0.0.0.0:8000", "https://life-sync-now-bucket.s3.amazonaws.com", "http://lifesyncnow-backend:8000", "http://lifesyncnow-backend", "lifesyncnow-backend"]
+                 "http://localhost:8000", "localhost:8000", 'localhost', "http://localhost:3000", "http://127.0.0.1", "127.0.0.1", "0.0.0.0", "http://0.0.0.0", "http://0.0.0.0:8000", "https://life-sync-now-bucket.s3.amazonaws.com", "http://lifesyncnow-backend:8000", "http://lifesyncnow-backend", "lifesyncnow-backend"]
 PASSWORD_RESET_TIMEOUT = 900  # 900 Sec = 15min
 # For development purposes.
 
@@ -407,3 +428,14 @@ CKEDITOR_CONFIGS = {
 #         ]
 #     }
 # }
+
+
+# -------Defender settings (sometimes required to restart for changes to take effect)
+DEFENDER_LOGIN_FAILURE_LIMIT = 5  # (default is 3)
+DEFENDER_COOLOFF_TIME = 60  # (default 300(5,mints))
+DEFENDER_USERNAME_FORM_FIELD = 'email'
+DEFENDER_LOCKOUT_TEMPLATE = 'blocked.html'
+
+# -------CAPTCHA SETTINGS
+RECAPTCHA_SITE_KEY = os.getenv('RECAPTCHA_SITE_KEY')
+RECAPTCHA_SECRET_KEY = os.getenv('RECAPTCHA_SECRET_KEY')

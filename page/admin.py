@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ContactUs, Paragraph, AdvertiseWithWellPlusGood, PrivacyPolicy
+from .models import ContactUs, AdvertiseWithWellPlusGood, PrivacyPolicy
 from django import forms
 from ckeditor.widgets import CKEditorWidget
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
@@ -19,16 +19,31 @@ class PrivacyPolicyAdmin(admin.ModelAdmin):
     form = PrivacyPolicyAdminForm
 
 
-class ParagraphsInline(admin.TabularInline):
-    model = Paragraph
-    extra = 1
+class ContactUsAdminForm(forms.ModelForm):
+    content = forms.CharField(
+        widget=CKEditorUploadingWidget(config_name='default'))
+
+    class Meta:
+        model = ContactUs
+        fields = '__all__'
 
 
 @admin.register(ContactUs)
 class ContactUsAdmin(admin.ModelAdmin):
-    inlines = [ParagraphsInline]
+    form = ContactUsAdminForm
     list_display = ('title', 'content',)
-    exclude = ('paragraphs_self_refer', 'paragraphs',)
+    exclude = ('paragraphs_self_refer',)
 
 
-admin.site.register(AdvertiseWithWellPlusGood)
+class AdvertiseWithWellPlusGoodAdminForm(forms.ModelForm):
+    content = forms.CharField(
+        widget=CKEditorUploadingWidget(config_name='default'))
+
+    class Meta:
+        model = AdvertiseWithWellPlusGood
+        fields = '__all__'
+
+
+@admin.register(AdvertiseWithWellPlusGood)
+class AdvertiseWithWellPlusGood(admin.ModelAdmin):
+    form = AdvertiseWithWellPlusGoodAdminForm

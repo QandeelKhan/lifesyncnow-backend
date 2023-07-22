@@ -12,6 +12,6 @@ class SEO(models.Model):
         return self.meta_title
 
     class Meta:
-        verbose_name = "SEO"
-        verbose_name_plural = "SEO"
+        verbose_name = "seo"
+        verbose_name_plural = "seo"
         db_table = "my_seo_table"
