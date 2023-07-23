@@ -7,8 +7,8 @@ WORKDIR /app
 RUN pip install --no-cache-dir celery
 
 # Copy the necessary files for the Celery worker
-COPY ../lifesyncnow_backend/celery_app.py ./lifesyncnow_backend/celery_app.py
-COPY ../lifesyncnow_backend/__init__.py ./lifesyncnow_backend/__init__.py
+COPY lifesyncnow_backend/celery_app.py ./lifesyncnow_backend/celery_app.py
+COPY lifesyncnow_backend/__init__.py ./lifesyncnow_backend/__init__.py
 
 # Set environment variables (if necessary)
 ENV REDIS_HOST=redis

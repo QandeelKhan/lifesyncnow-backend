@@ -13,7 +13,6 @@ RUN apk update && apk add postgresql-client mariadb-dev build-base python3-dev \
     libpq \
     redis
 
-RUN mkdir /app
 WORKDIR /app
 COPY requirements.txt /app/
 RUN pip3 install --user -r requirements.txt
