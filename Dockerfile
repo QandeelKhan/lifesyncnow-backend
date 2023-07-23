@@ -18,11 +18,10 @@ WORKDIR /app
 COPY requirements.txt /app/
 RUN pip3 install --user -r requirements.txt
 COPY . /app/
-COPY wait-for-it.sh /app/
-COPY run-migrations.sh /app/
-RUN chmod +x /app/wait-for-it.sh /app/run-migrations.sh
+RUN chmod +x -R /app/scripts
 
-FROM python:3.11-alpine3.18
+# Build stage
+FROM python:3.11-alpine3.18 as production
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 RUN apk update && apk add postgresql-libs mariadb-connector-c bash

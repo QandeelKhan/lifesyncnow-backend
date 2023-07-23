@@ -3,3 +3,5 @@ venv*
 # **/migrations
 # */migrations
 # **/migrations/
+.pyc
+__pycache__
