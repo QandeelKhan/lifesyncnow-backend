@@ -4,9 +4,9 @@ from decouple import config
 from ..settings.common import BASE_DIR
 from django.conf import settings
 
-# USE_SPACES = config('USE_SPACES', cast=bool, default=False)
-USE_SPACES = False
-
+USE_SPACES = config('USE_SPACES', cast=bool, default=False)
+# USE_SPACES = False
+print(USE_SPACES)
 if USE_SPACES:
     # settings
     # AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
@@ -36,7 +36,7 @@ if USE_SPACES:
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
     # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage
     #
-    # CKEDITOR_UPLOAD_PATH = "uploads/"
+    CKEDITOR_UPLOAD_PATH = 'uploads/'
 if not USE_SPACES:
     # PUBLIC_MEDIA_LOCATION = 'space-lifesyncnow/media'
     # ckeditor related only
@@ -61,10 +61,6 @@ if not USE_SPACES:
     CKEDITOR_UPLOAD_PATH = f'uploads/'
     # CKEDITOR_UPLOAD_PATH = f'localhost:8000{MEDIA_URL}uploads/'
     "http://localhost:8000/media/space-lifesyncnow/media/commerce_season.jpeg"
-
-    print(CKEDITOR_UPLOAD_PATH)
-    print(CKEDITOR_UPLOAD_PATH)
-    print(CKEDITOR_UPLOAD_PATH)
 
 # helping material
 # https://testdriven.io/blog/django-digitalocean-spaces/

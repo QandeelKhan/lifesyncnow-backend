@@ -4,13 +4,14 @@ import os
 from pathlib import Path
 from pprint import pprint
 # from celery.schedules import crontab
-from django.conf import settings
 from dotenv import load_dotenv
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+env_file = os.path.join(BASE_DIR, 'env', '.env.dev')
+load_dotenv(env_file)
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # --------APPS STRUCTURE----------#
@@ -22,8 +23,8 @@ DJANGO_APPS = [
     'django.contrib.sessions',
     'django.contrib.staticfiles',
     'channels',
-
 ]
+
 PROJECT_APPS = [
     'blog',
     'legal',
@@ -207,17 +208,9 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-
-# STATIC_URL = '/static/'
-# STATIC_ROOT = BASE_DIR / 'static'
-
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 from ..cdn.storage_conf import *  # noqa
 
 # Default primary key field type
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
@@ -329,15 +322,14 @@ X_FRAME_OPTIONS = 'DENY'
 # but in django 4
 # CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
-ALLOWED_HOSTS = ["https://lifesyncnow.com", "https://www.lifesyncnow.com", "http://0.0.0.0:8000",
-                 "http://localhost:8000", "localhost:8000", 'localhost', "http://localhost:3000", "http://127.0.0.1", "127.0.0.1", "0.0.0.0", "http://0.0.0.0", "http://0.0.0.0:8000", "https://life-sync-now-bucket.s3.amazonaws.com", "http://lifesyncnow-backend:8000", "http://lifesyncnow-backend", "lifesyncnow-backend"]
+# ALLOWED_HOSTS = ["https://lifesyncnow.com", "https://www.lifesyncnow.com", "http://0.0.0.0:8000",
+#                  "http://localhost:8000", "localhost:8000", 'localhost', "http://localhost:3000", "http://127.0.0.1", "127.0.0.1", "0.0.0.0", "http://0.0.0.0", "http://0.0.0.0:8000", "https://life-sync-now-bucket.s3.amazonaws.com", "http://lifesyncnow-backend:8000", "http://lifesyncnow-backend", "lifesyncnow-backend"]
+ALLOWED_HOSTS = ["*"]
 PASSWORD_RESET_TIMEOUT = 900  # 900 Sec = 15min
 # For development purposes.
 
 # we whitelist localhost:3000 because that's where frontend will be served
 # CORS_ORIGIN_WHITELIST = ['*']
-# CORS_ORIGIN_WHITELIST = ["https://lifesyncnow.com", "https://www.lifesyncnow.com", "http://0.0.0.0:8000",
-#                          "http://localhost:8000", "http://localhost:3000", "http://0.0.0.0:8000", "*"]
 CORS_ORIGIN_WHITELIST = ["https://lifesyncnow.com", "https://www.lifesyncnow.com", "http://0.0.0.0:8000",
                          "http://localhost:8000", "http://localhost:3000", "https://life-sync-now-bucket.s3.amazonaws.com", "http://lifesyncnow-backend:8000", "http://lifesyncnow-backend"]
 CORS_ORIGIN_ALLOW_ALL = True
