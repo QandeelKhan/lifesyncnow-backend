@@ -17,6 +17,7 @@ WORKDIR /app
 COPY requirements.txt /app/
 RUN pip3 install --user -r requirements.txt
 COPY . /app/
+# RUN find /app -type d -name "migrations" -exec rm -r {} +
 RUN chmod +x -R /app/scripts
 
 # Build stage
@@ -28,6 +29,7 @@ RUN apk update && apk add postgresql-libs mariadb-connector-c bash
 WORKDIR /root/lifesyncnow-backend
 COPY --from=builder /root/.local /root/.local
 COPY --from=builder /app /root/lifesyncnow-backend
+# COPY --from=builder /app /root/lifesyncnow-backend --exclude=/app/*/migrations/
 ENV PATH=/root/.local/bin:$PATH
 EXPOSE 8000
 EXPOSE 6379

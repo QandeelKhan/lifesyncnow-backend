@@ -321,7 +321,7 @@ X_FRAME_OPTIONS = 'DENY'
 # For development purposes.
 # but in django 4
 # CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_CREDENTIALS = True
 # ALLOWED_HOSTS = ["https://lifesyncnow.com", "https://www.lifesyncnow.com", "http://0.0.0.0:8000",
 #                  "http://localhost:8000", "localhost:8000", 'localhost', "http://localhost:3000", "http://127.0.0.1", "127.0.0.1", "0.0.0.0", "http://0.0.0.0", "http://0.0.0.0:8000", "https://life-sync-now-bucket.s3.amazonaws.com", "http://lifesyncnow-backend:8000", "http://lifesyncnow-backend", "lifesyncnow-backend"]
 ALLOWED_HOSTS = ["*"]
@@ -329,9 +329,9 @@ PASSWORD_RESET_TIMEOUT = 900  # 900 Sec = 15min
 # For development purposes.
 
 # we whitelist localhost:3000 because that's where frontend will be served
-# CORS_ORIGIN_WHITELIST = ['*']
-CORS_ORIGIN_WHITELIST = ["https://lifesyncnow.com", "https://www.lifesyncnow.com", "http://0.0.0.0:8000",
-                         "http://localhost:8000", "http://localhost:3000", "https://life-sync-now-bucket.s3.amazonaws.com", "http://lifesyncnow-backend:8000", "http://lifesyncnow-backend"]
+CORS_ORIGIN_WHITELIST = ['*']
+# CORS_ORIGIN_WHITELIST = ["https://lifesyncnow.com", "https://www.lifesyncnow.com", "http://0.0.0.0:8000",
+#                          "http://localhost:8000", "http://127.0.0.1", "http://127.0.0.1:8000", "http://localhost:3000", "https://life-sync-now-bucket.s3.amazonaws.com", "http://lifesyncnow-backend:8000", "http://lifesyncnow-backend"]
 CORS_ORIGIN_ALLOW_ALL = True
 
 # for react origin

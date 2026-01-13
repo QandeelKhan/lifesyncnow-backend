@@ -1,7 +1,8 @@
 venv*
+.pyc
+**/migrations/
+**/__pycache__/
 # */migrations  (this way will not work for dockerignore file) see below.
 # **/migrations
 # */migrations
 # **/migrations/
-.pyc
-__pycache__
